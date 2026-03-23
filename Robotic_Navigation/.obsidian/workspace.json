@@ -1,0 +1,193 @@
+{
+  "main": {
+    "id": "cda37cfe94c0b648",
+    "type": "split",
+    "children": [
+      {
+        "id": "812ec4b3d687680e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "314d21bd3ae4a49c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "topic.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "topic"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "833bfaa87ff917f6",
+    "type": "split",
+    "children": [
+      {
+        "id": "1e204608344a4961",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4e310bf0d86d37bc",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "6cfcab7fc3e0af30",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "c6e3b94e2fb0db39",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 252.5
+  },
+  "right": {
+    "id": "65b85108cab76f1d",
+    "type": "split",
+    "children": [
+      {
+        "id": "d0393f5fec414558",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "914e1d62ad97bd6d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Mapping.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Mapping"
+            }
+          },
+          {
+            "id": "6dba9f7d3b4d80de",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Mapping.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Mapping"
+            }
+          },
+          {
+            "id": "8eeace9eb9e55b33",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "65657c9a611c933b",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Mapping.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Mapping"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "314d21bd3ae4a49c",
+  "lastOpenFiles": [
+    "Navigation_ROS.md",
+    "Pasted image 20251118005456.png",
+    "Pasted image 20251118005432.png",
+    "ROS导航中关于odom frame的理解.md",
+    "Pasted image 20251118001754.png",
+    "Pasted image 20251118001529.png",
+    "Pasted image 20251118001455.png",
+    "topic.md",
+    "Pasted image 20251117235821.png",
+    "Pasted image 20251117235643.png",
+    "Pasted image 20251117235021.png",
+    "Pasted image 20251117230945.png",
+    "Pasted image 20251117230920.png",
+    "Mapping.md",
+    "Navigation.md",
+    "XML.md",
+    "Lidar.md",
+    "Welcome.md"
+  ]
+}

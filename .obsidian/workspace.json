@@ -1,0 +1,230 @@
+{
+  "main": {
+    "id": "a40327f3e858a657",
+    "type": "split",
+    "children": [
+      {
+        "id": "6c3a28f17ab6679a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f9491992ce2fb6e8",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新分頁"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7ba889e77abf5136",
+    "type": "split",
+    "children": [
+      {
+        "id": "5c16325e7c77c16f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9aff95b12d4485ca",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "檔案瀏覽器"
+            }
+          },
+          {
+            "id": "b71e348a6b4f2593",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "d453b55da67dab68",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "8c84a9b64c790b25",
+    "type": "split",
+    "children": [
+      {
+        "id": "06aeb6cef4e1ed66",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "78e2c7ae9fbf741d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Skill Development Schedule/Planning.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Planning"
+            }
+          },
+          {
+            "id": "50512c555379f90d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Skill Development Schedule/Planning.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Planning"
+            }
+          },
+          {
+            "id": "292a6d1a6d87f612",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "e3794e8c45a3f384",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "ee5c349c89d7ca86",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Skill Development Schedule/Planning.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Planning"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "bases:建立新的 base": false
+    }
+  },
+  "active": "9aff95b12d4485ca",
+  "lastOpenFiles": [
+    "OS/MESI and MOESI protocal.md",
+    "離散數學/布林代數/積項之合與合項之積.md",
+    "數位電路/基礎邏輯閘介紹.md",
+    "OS/Cache.md",
+    "OS/segmentation & pagging.md",
+    "OS/logical_addr_and_physical_addr.png",
+    "OS/fully_associative_mapping.png",
+    "OS/set_associative_mapping.png",
+    "OS/direct_mapping.png",
+    "OS/Multilevel_paging.png",
+    "OS/demand_paging.png",
+    "OS/physical_addr2cache.png",
+    "OS/instruction_data_cache.png",
+    "離散數學/布林代數",
+    "離散數學",
+    "數位電路/OR_gate.png",
+    "數位電路/NOR_gate.png",
+    "數位電路",
+    "虛擬機器/Chapter 2.md",
+    "虛擬機器/Chapter 1.md",
+    "未命名.base",
+    "create a link.md",
+    "數學雜談/組合數學和集合論基礎物件和操做.md",
+    "C_C++/C/extern 中指標和陣列的差別.md",
+    "虛擬機器/ARM violates Popek & Goldberg Criteria.md",
+    "虛擬機器/Different classes of CPU register.md",
+    "Jserv Linux 課/第二周/Hash table 實作.md",
+    "Jserv Linux 課/第二周/數值系統.md",
+    "虛擬機器",
+    "master_thesis/FREIGHT Code.md",
+    "Jserv Linux 課/第二周",
+    "Jserv Linux 課/第一周/gdb 簡介.md",
+    "Jserv Linux 課/第一周/系統效能量測.md",
+    "Jserv Linux 課/第一周/指針.md",
+    "Linux_command/Server Secure.md",
+    "Linux_command/Process monitor.md",
+    "Linux_command/How to SSH from Windows to an Ubuntu GUI.md",
+    "master_thesis/Compile FREIGHT.md",
+    "Jserv Linux 課/第一周/用位元組來做整數運算.md",
+    "master_thesis/FREIGHT Dataset Preprocess.md",
+    "LAW轉換需要的檔案.md",
+    "Jserv Linux 課/第一周",
+    "Jserv Linux 課",
+    "數學雜談",
+    "基礎代數_李華介"
+  ]
+}
