@@ -8,13 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "f9491992ce2fb6e8",
+            "id": "2ac3c62706c8c896",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "虛擬機器/chapter 5 and memory virtualization.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新分頁"
+              "title": "chapter 5 and memory virtualization"
             }
           }
         ]
@@ -181,26 +185,35 @@
   },
   "active": "9aff95b12d4485ca",
   "lastOpenFiles": [
+    "虛擬機器/VM_graph/EPT_transformation_step.png",
+    "虛擬機器/VM_graph/virtual_machine_classification.png",
+    "虛擬機器/VM_graph/VM_basic_architexture.png",
+    "虛擬機器/VM_graph/Virtualization_method.png",
+    "虛擬機器/chapter 5 and memory virtualization.md",
+    "虛擬機器/IO Virtualization.md",
+    "虛擬機器/Chapter 1 (Introduction of VM).md",
     "OS/MESI and MOESI protocal.md",
+    "master_thesis/FREIGHT Code.md",
+    "master_thesis/Decomposition for paralled sparse-matrix vector multiplication.md",
+    "master_thesis/Compile FREIGHT.md",
+    "master_thesis/Bucket-based Monotone Priority Queues.md",
+    "master_thesis/FREIGHT_CODE/圖形IO(graph_io_stream).md",
+    "OS/OS_graph/private_cache_line_FSM.png",
+    "OS/OS_graph/other_cache_line_FSM.png",
+    "OS/OS_graph",
+    "虛擬機器/VM_graph",
+    "OS/segmentation & pagging.md",
+    "OS/OS_graph/Multilevel_paging.png",
+    "OS/Cache.md",
     "離散數學/布林代數/積項之合與合項之積.md",
     "數位電路/基礎邏輯閘介紹.md",
-    "OS/Cache.md",
-    "OS/segmentation & pagging.md",
-    "OS/logical_addr_and_physical_addr.png",
-    "OS/fully_associative_mapping.png",
-    "OS/set_associative_mapping.png",
-    "OS/direct_mapping.png",
-    "OS/Multilevel_paging.png",
-    "OS/demand_paging.png",
-    "OS/physical_addr2cache.png",
-    "OS/instruction_data_cache.png",
+    "OS/OS_graph/logical_addr_and_physical_addr.png",
+    "OS/OS_graph/fully_associative_mapping.png",
+    "OS/OS_graph/set_associative_mapping.png",
     "離散數學/布林代數",
     "離散數學",
-    "數位電路/OR_gate.png",
-    "數位電路/NOR_gate.png",
     "數位電路",
     "虛擬機器/Chapter 2.md",
-    "虛擬機器/Chapter 1.md",
     "未命名.base",
     "create a link.md",
     "數學雜談/組合數學和集合論基礎物件和操做.md",
@@ -210,21 +223,12 @@
     "Jserv Linux 課/第二周/Hash table 實作.md",
     "Jserv Linux 課/第二周/數值系統.md",
     "虛擬機器",
-    "master_thesis/FREIGHT Code.md",
     "Jserv Linux 課/第二周",
     "Jserv Linux 課/第一周/gdb 簡介.md",
     "Jserv Linux 課/第一周/系統效能量測.md",
     "Jserv Linux 課/第一周/指針.md",
     "Linux_command/Server Secure.md",
-    "Linux_command/Process monitor.md",
-    "Linux_command/How to SSH from Windows to an Ubuntu GUI.md",
-    "master_thesis/Compile FREIGHT.md",
-    "Jserv Linux 課/第一周/用位元組來做整數運算.md",
-    "master_thesis/FREIGHT Dataset Preprocess.md",
-    "LAW轉換需要的檔案.md",
     "Jserv Linux 課/第一周",
-    "Jserv Linux 課",
-    "數學雜談",
-    "基礎代數_李華介"
+    "Jserv Linux 課"
   ]
 }
