@@ -30,6 +30,7 @@ Page 的運作流程如上如所示，可以看到它改進了 segmentation 要�
 >- 位 1 (read/write) : 控制 page 讀寫權限。
 >- 位 2 (user/kernel) : 區分 user mode 跟 supervisor mode 。
 >- 位 4 (page-level cache disable) : 控制 page 緩存策略。 1 表示禁用 page 的緩存； 0 啟用緩存。
+>	- MMIO 地址禁用緩存
 >- 位 5 (accessed) : 紀錄 page 是否被訪問過。
 >- 位 6 (dirty) : 紀律 page 是否被修改過。
 >

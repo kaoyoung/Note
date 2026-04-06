@@ -4,24 +4,53 @@
     "type": "split",
     "children": [
       {
-        "id": "6c3a28f17ab6679a",
+        "id": "71a78e3838b20331",
         "type": "tabs",
         "children": [
           {
-            "id": "2ac3c62706c8c896",
+            "id": "f5fd80d26f8c790a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "虛擬機器/chapter 5 and memory virtualization.md",
+                "file": "OS/Linux VFS.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "chapter 5 and memory virtualization"
+              "title": "Linux VFS"
+            }
+          },
+          {
+            "id": "b09d6c5a0a272258",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "虛擬機器/VM HW1.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "VM HW1"
+            }
+          },
+          {
+            "id": "01739ed3522b1a9f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "虛擬機器/Virtual Machine HW1 Compile & Test.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Virtual Machine HW1 Compile & Test"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -78,7 +107,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "8c84a9b64c790b25",
@@ -183,51 +213,52 @@
       "bases:建立新的 base": false
     }
   },
-  "active": "9aff95b12d4485ca",
+  "active": "01739ed3522b1a9f",
   "lastOpenFiles": [
+    "虛擬機器/VM HW1.md",
+    "OS/Linux VFS.md",
+    "未命名.md",
+    "OS/OS_graph/Tradition_FS_Disk.png",
+    "Pasted image 20260401154431.png",
+    "OS/OS_graph/VFS_architecture_Linux.png",
+    "OS/OS_graph/Linux_VFS.png",
+    "Robotic_Navigation/System Programming/File I_O.md",
+    "OS/Posix vs. Linux 進程管理.md",
+    "虛擬機器/chapter 6 (IO Virtualization).md",
+    "master_thesis/FREIGHT Code.md",
+    "虛擬機器/Virtual Machine HW1 API.md",
+    "虛擬機器/Virtual Machine HW1 Architecture.md",
+    "虛擬機器/Virtual Machine HW1 Compile & Test.md",
+    "D-vcpu.md",
+    "虛擬機器/分析 Linux 虛擬化 KVM-Qemu 分析之内存虛擬化.md",
+    "虛擬機器/VM_graph/GVA2HPA.png",
+    "虛擬機器/VM_graph/nested_kvm_architecture.png",
+    "OS/Cache.md",
+    "虛擬機器/chapter 5 and memory virtualization.md",
+    "OS/segmentation & pagging.md",
     "虛擬機器/VM_graph/EPT_transformation_step.png",
     "虛擬機器/VM_graph/virtual_machine_classification.png",
     "虛擬機器/VM_graph/VM_basic_architexture.png",
     "虛擬機器/VM_graph/Virtualization_method.png",
-    "虛擬機器/chapter 5 and memory virtualization.md",
     "虛擬機器/IO Virtualization.md",
     "虛擬機器/Chapter 1 (Introduction of VM).md",
     "OS/MESI and MOESI protocal.md",
-    "master_thesis/FREIGHT Code.md",
     "master_thesis/Decomposition for paralled sparse-matrix vector multiplication.md",
     "master_thesis/Compile FREIGHT.md",
     "master_thesis/Bucket-based Monotone Priority Queues.md",
     "master_thesis/FREIGHT_CODE/圖形IO(graph_io_stream).md",
-    "OS/OS_graph/private_cache_line_FSM.png",
-    "OS/OS_graph/other_cache_line_FSM.png",
     "OS/OS_graph",
     "虛擬機器/VM_graph",
-    "OS/segmentation & pagging.md",
-    "OS/OS_graph/Multilevel_paging.png",
-    "OS/Cache.md",
     "離散數學/布林代數/積項之合與合項之積.md",
     "數位電路/基礎邏輯閘介紹.md",
-    "OS/OS_graph/logical_addr_and_physical_addr.png",
-    "OS/OS_graph/fully_associative_mapping.png",
-    "OS/OS_graph/set_associative_mapping.png",
     "離散數學/布林代數",
     "離散數學",
     "數位電路",
     "虛擬機器/Chapter 2.md",
-    "未命名.base",
+    "Untitled/未命名.base",
     "create a link.md",
-    "數學雜談/組合數學和集合論基礎物件和操做.md",
-    "C_C++/C/extern 中指標和陣列的差別.md",
-    "虛擬機器/ARM violates Popek & Goldberg Criteria.md",
-    "虛擬機器/Different classes of CPU register.md",
-    "Jserv Linux 課/第二周/Hash table 實作.md",
-    "Jserv Linux 課/第二周/數值系統.md",
     "虛擬機器",
     "Jserv Linux 課/第二周",
-    "Jserv Linux 課/第一周/gdb 簡介.md",
-    "Jserv Linux 課/第一周/系統效能量測.md",
-    "Jserv Linux 課/第一周/指針.md",
-    "Linux_command/Server Secure.md",
     "Jserv Linux 課/第一周",
     "Jserv Linux 課"
   ]

@@ -1,0 +1,1 @@
+### ref: [Process identifiers Process scheduling Linux schedulers – overview](https://students.mimuw.edu.pl/ZSO/Wyklady/13_CPUschedulers1/ProcessScheduling1.pdf)、[一文看懂Linux进程ID的内核管理](https://zhuanlan.zhihu.com/p/552139110)、[並行程式設計: POSIX Thread](https://hackmd.io/@sysprog/posix-threads)
