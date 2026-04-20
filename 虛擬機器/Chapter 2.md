@@ -34,7 +34,7 @@ If you are interesting in why we use tuple in feature 4, you may see [[組合數
 >4. be efficient to show at worst a small decrease in speed?
 
 We can conclude the above questions to three critical criteria for VMM
-1. Equivalence (q1, q3):  The **virtual machine** is essentially identical to the underlying processor, i.e., a du plicate of the computer architecture.
+1. Equivalence (q1, q3):  The **virtual machine** is essentially identical to the underlying processor, i.e., a duplicate of the computer architecture.
 2. Safety (q2): The **VMM** must be in complete control of the hardware at all times, without making any assumptions about the software running inside the virtual machine. A **virtual machine** is isolated from the underlying hardware and operates as if it were running on a distinct computer.
 3. Performance (q4): The efficiency requirement implies that the execution speed of the program in a virtualized environment is at worst a **minor decrease** over the execution time when run directly on the underlying hardware.
 

@@ -4,53 +4,39 @@
     "type": "split",
     "children": [
       {
-        "id": "71a78e3838b20331",
+        "id": "b3ca963be641487f",
         "type": "tabs",
         "children": [
           {
-            "id": "f5fd80d26f8c790a",
+            "id": "914926be9904b724",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "OS/Linux VFS.md",
+                "file": "虛擬機器/Chapter 6 (IO Virtualiation).md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Linux VFS"
+              "title": "Chapter 6 (IO Virtualiation)"
             }
           },
           {
-            "id": "b09d6c5a0a272258",
+            "id": "94d55e7df15e3204",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "虛擬機器/VM HW1.md",
+                "file": "C_C++/C/Typedef 跟 define 的差別.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "VM HW1"
-            }
-          },
-          {
-            "id": "01739ed3522b1a9f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "虛擬機器/Virtual Machine HW1 Compile & Test.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Virtual Machine HW1 Compile & Test"
+              "title": "Typedef 跟 define 的差別"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -90,7 +76,7 @@
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
-              "title": "Search"
+              "title": "搜尋"
             }
           },
           {
@@ -107,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 521.5,
     "collapsed": true
   },
   "right": {
@@ -124,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Skill Development Schedule/Planning.md",
+                "file": "虛擬機器/VM Paper 1.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -134,7 +120,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Planning"
+              "title": "VM Paper 1 的反向連結"
             }
           },
           {
@@ -143,12 +129,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Skill Development Schedule/Planning.md",
+                "file": "虛擬機器/VM Paper 1.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Planning"
+              "title": "VM Paper 1 的對外連結"
             }
           },
           {
@@ -195,11 +181,12 @@
               "title": "Outline of Planning"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 200,
     "collapsed": true
   },
   "left-ribbon": {
@@ -213,53 +200,53 @@
       "bases:建立新的 base": false
     }
   },
-  "active": "01739ed3522b1a9f",
+  "active": "94d55e7df15e3204",
   "lastOpenFiles": [
+    "虛擬機器/Chapter 6 (IO Virtualiation).md",
+    "C_C++/C/Typedef 跟 define 的差別.md",
+    "Rust Book/Chapter 1 (Getting Start).md",
+    "Robotic_Navigation/未命名.md",
+    "虛擬機器/VM Paper 1.md",
+    "虛擬機器/VM_graph/IO interact with the CPU and Memory.png",
+    "虛擬機器/VM_graph/IOMMU possible combination.png",
+    "D-vcpu.md",
+    "虛擬機器/VM_graph/IO emulation in the KVMQEMU hypervisor.png",
+    "虛擬機器/VM_graph/PCIe tree topology.png",
+    "虛擬機器/VM_graph/PCIe configuration space.png",
+    "Rust Book/Chapter 3 (Common Program Concepts).md",
+    "虛擬機器/VM_graph/virto framework of paravitual.png",
+    "虛擬機器/chapter 6 (IO Virtualization).md",
+    "虛擬機器/VM_graph/a possible internal organization of an Intel server.png",
+    "虛擬機器/VM_graph/IO ring demonstration.png",
+    "虛擬機器/VM_graph/front-end and back-end of Paravirtual.png",
+    "虛擬機器/VM_graph/direct device assignment demonstration.png",
+    "虛擬機器/Chapter 4 (x86-64 CPU Virtualization with VT-x).md",
+    "Rust Book",
+    "Linux_command/How to resize swap size.md",
+    "Linux_command/Linux_command picture",
     "虛擬機器/VM HW1.md",
+    "write-up.pdf",
+    "Linux_command/檔案權限和搜尋.md",
+    "虛擬機器/Chapter 1 (Introduction of VM).md",
+    "虛擬機器/Chapter 2.md",
+    "電腦科學雜談/How Not to Lie With Statictics the Correct Way to Summarize Benchmark Results.md",
+    "電腦科學雜談/Picture",
+    "電腦科學雜談",
+    "虛擬機器/Virtual Machine HW1 Compile & Test.md",
+    "虛擬機器/Agile Paging (Extceeding the Best of Nested and Shadow Paging).md",
     "OS/Linux VFS.md",
-    "未命名.md",
-    "OS/OS_graph/Tradition_FS_Disk.png",
-    "Pasted image 20260401154431.png",
-    "OS/OS_graph/VFS_architecture_Linux.png",
-    "OS/OS_graph/Linux_VFS.png",
     "Robotic_Navigation/System Programming/File I_O.md",
     "OS/Posix vs. Linux 進程管理.md",
-    "虛擬機器/chapter 6 (IO Virtualization).md",
     "master_thesis/FREIGHT Code.md",
     "虛擬機器/Virtual Machine HW1 API.md",
     "虛擬機器/Virtual Machine HW1 Architecture.md",
-    "虛擬機器/Virtual Machine HW1 Compile & Test.md",
-    "D-vcpu.md",
     "虛擬機器/分析 Linux 虛擬化 KVM-Qemu 分析之内存虛擬化.md",
-    "虛擬機器/VM_graph/GVA2HPA.png",
-    "虛擬機器/VM_graph/nested_kvm_architecture.png",
     "OS/Cache.md",
     "虛擬機器/chapter 5 and memory virtualization.md",
-    "OS/segmentation & pagging.md",
-    "虛擬機器/VM_graph/EPT_transformation_step.png",
-    "虛擬機器/VM_graph/virtual_machine_classification.png",
-    "虛擬機器/VM_graph/VM_basic_architexture.png",
-    "虛擬機器/VM_graph/Virtualization_method.png",
-    "虛擬機器/IO Virtualization.md",
-    "虛擬機器/Chapter 1 (Introduction of VM).md",
-    "OS/MESI and MOESI protocal.md",
-    "master_thesis/Decomposition for paralled sparse-matrix vector multiplication.md",
-    "master_thesis/Compile FREIGHT.md",
-    "master_thesis/Bucket-based Monotone Priority Queues.md",
-    "master_thesis/FREIGHT_CODE/圖形IO(graph_io_stream).md",
     "OS/OS_graph",
     "虛擬機器/VM_graph",
-    "離散數學/布林代數/積項之合與合項之積.md",
-    "數位電路/基礎邏輯閘介紹.md",
     "離散數學/布林代數",
     "離散數學",
-    "數位電路",
-    "虛擬機器/Chapter 2.md",
-    "Untitled/未命名.base",
-    "create a link.md",
-    "虛擬機器",
-    "Jserv Linux 課/第二周",
-    "Jserv Linux 課/第一周",
-    "Jserv Linux 課"
+    "數位電路"
   ]
 }

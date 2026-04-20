@@ -521,7 +521,7 @@ static __always_inline void vcpu_set_reg(struct kvm_vcpu *vcpu, u8 reg_num,
 
 >[!question] 這些 register 怎麼決定的
 >由 SMCCC Convention 決訂
->![[Pasted image 20260401154431.png]]
+>![[SMCCC_Register_Convention.png]]
 >
 
 >[!question] ARM 架構下，不同執行層級之間如何透過 SMC/HVC 通信
