@@ -281,6 +281,11 @@ The hypervisor needs to maintain control, so it sets a VMCS control bit (denoted
 >[!note] Assigned EOI Register
 >The operating system uses the **LAPIC to control all interrupt activity**. To this end, the LAPIC employs multiple registers used to configure, block, deliver, and (notably in this context) signal EOI. If we assume that an interrupt of a physical device can somehow be **safely delivered directly to the guest without hypervisor involvement**, then the EOI register should correspondingly also be assigned to the guest. Thankfully, the current LAPIC interface, x2APIC, exposes its registers using model specific registers (MSRs), which are accessed through “read MSR” and “write MSR” instructions. The CPU exits on LAPIC accesses according to an **MSR bitmap controlled by the hypervisor**. The bitmap specifies the “sensitive” MSRs that cannot be accessed directly by the guest and thus trigger exits. In contrast to **other LAPIC registers, with appropriate safety measures, EOI can be securely assigned to the guest**.
 
+>[!note]
+>There is only **one** EOI register in the Local APIC (LAPIC). You cannot split the register itself.
+>The hypervisor uses a security feature called an **MSR Bitmap**. This bitmap acts like an access control list. The hypervisor configures the bitmap to say, _"Allow the guest to read/write to the EOI register without causing a VM-Exit."_ The guest gets full access to that one specific register to acknowledge the interrupts it handles.
+
+
 >[!note] Assigned Interrupts
 >Assume a guest is directly assigned with a device. By utilizing a **software based technique called exitless interrupts (ELI)**, it is possible to additionally securely assign the device’s interrupts to the guest—without modifying the guest or resorting to paravirtualization. An assigned exitless interrupt does not trigger an exit. It is **delivered directly to the guest without host involvement**. ELI is structured based on the assumption
 >- In high-performance, SRIOV-based device assignment deployments **nearly all physical interrupts arriving to a given core are targeted at the guest that runs on that core**.
@@ -291,10 +296,75 @@ The hypervisor needs to maintain control, so it sets a VMCS control bit (denoted
 >1. deliver assigned interrupts directly to the guest’s interrupt handler
 >2. force an exit for non-assigned interrupts by marking the corresponding IDT entries as non-present.
 
+>[!note]
+>Even though the Shadow IDT ensures the hypervisor eventually gets its interrupts (by forcing a fault), the interrupt still **initially** landed in the guest's CPU context.
+>- Instead of going: `Hardware -> Hypervisor` 
+>- It now goes: `Hardware -> Guest Context -> Shadow IDT Fault -> VM-Exit -> Hypervisor`.
+>
+>This "detour" through the guest context and the resulting fault is exactly what causes the "interrupt latency experienced by the hypervisor" mentioned in the first text. If the hypervisor cannot afford that detour latency for its own interrupts, the administrator must abandon ELI entirely (hence, all-or-nothing).
+
 >[!question] what if we frequently updating shadow IDT? I think there will be lots of overhead
 >Almost all IDT modifications occur only during the system boot process or when specific device drivers are initially loaded. Consequently, the hypervisor only absorbs the performance hit of the "trap and emulate" mechanism during these brief setup phases.
 
 ## Posted Interrupts
+ELI has two notable drawbacks
+1. it increases hypervisor complexity, not just because of IDT shadowing, but also because of the security measures that the hypervisor must employ
+	- For example, the guest might decide never to acknowledge completion of interrupts, which affects the hypervisor, since guest and hypervisor share the physical LAPIC EOI register.
+2. ELI is inherently an all-or-nothing approach: either all interrupts go initially to the guest, which might adversely affect, for example, the interrupt latency experienced by the hypervisor, or ELI cannot be used.
+
+**Posted interrupts:** allow the hypervisor to easily assign specific interrupts of specific devices to specific guests, and to have all other interrupts delivered directly to the host without requiring any sophisticated soft ware hacks.
+It divides into two compoments:
+1. CPU posted interrupts: interrupts that are directly injected by the hypervisor that runs on one core to a guest that runs on a different core without involving the hypervisor on the latter core
+2. IOMMU posted interrupts (denoted “VT-d posted interrupts” by Intel): interrupts that are delivered directly from I/O devices to guest VMs.
+Both components rely on Intel’s APIC virtu alization (APICv), which provides a “virtual APIC” for the guest, whose semantics are preserved by the underlying hardware, rather than by the hypervisor via LAPIC emulation.
+
+>[!note] Virtual APIC
+>The hypervisor configures the **VMCS of the guest to point to a 4 KB memory area**, denoted as the **“virtual APIC page,”** which the processor uses in order to virtualize access to APIC registers and track their state, and to manage virtual interrupts.
+>When a virtual register is updated, the hardware emulates the side-effects that would have occurred if a physical APIC register was updated similarly; this behavior is called **“APIC-write emulation.”**
+>Only after the APIC-write emulation is performed does the hardware trigger exits, if necessary.
+>APICv allows the hypervisor to associate a guest with a **fully functioning hardware supported virtual APIC, which is of course different than the physical APIC**.
+>The subsequent (virtual) EOI operation would likewise **only affect this particular virtual APIC and its guest**. The interrupt handling operations of the virtual APIC are completely **decoupled from the hypervisor’s physical interrupt activity**.
+>APICv provides an interface for compute entities (a different core, an SRIOV device) to turn on bits in designated virtual APIC spaces and have the system behave as if an **interrupt was generated for the associated guest, and only for it**.
+
+>[!note] CPU Posted Interrupts
+>![[CPU Posted Interrupt.png]]
+>
+>- NDST (Notification Destination): It holds the ID of the **destination LAPIC** where R will fire
+>- NV (Notification vector): It holds the value of some **interrupt vector**, interpreted by the destination NDST as a notification event, which triggers the direct delivery of R. 
+>
+>**Goal:**  
+>A hypervisor on Core 1 wants to deliver an interrupt (vector R=30) to a guest running on Core 2 **without causing a VM exit** on Core 2.
+>
+>**Key steps:**
+>1. **Update PI Descriptor (Core 1)**
+>    - Set bit 30 in the PIR (Posted Interrupt Request) bitmap.
+>    - Set NDST = Core 2 (target LAPIC).
+>    - Set NV = 242 (a “doorbell” vector chosen by the hypervisor).
+>2. **Send doorbell IPI (**Inter-Processor Interrupt) (Core 1 → Core 2)**
+>    - Core 1 sends an IPI with vector 242 to Core 2.
+>3. **Core 2 processes the doorbell (while guest is running)**
+>    - Does **not** invoke the handler for vector 242.
+>    - Instead, merges the PIR (bit 30) into the guest’s **vIRR** (virtual interrupt request register).
+>    - Then evaluates pending virtual interrupts following physical APIC rules.
+>4. **Virtual interrupt delivery (automatic, no hypervisor involvement)**
+>	- Selects the highest priority bit from vIRR → stores it in **RVI** (Requesting Virtual Interrupt, in VMCS).
+>	- If delivery is allowed (guest interrupts enabled, no higher priority in service), moves RVI to **SVI** (Servicing Virtual Interrupt) and delivers the interrupt to the guest.
+>	- Updates vIRR (clear delivered bit), vISR (set bit), and recomputes RVI.
+>5. **Guest EOI**
+>    - Guest writes vEOI → Core 2 clears SVI and vISR, then re‑evaluates pending interrupts.
+>
+>**Key takeaway:**  
+>The entire delivery from doorbell to guest interrupt handler happens **without any VM exit**. The hypervisor on Core 2 is never notified unless explicitly configured to be.
+
+
+>[!note] IOMMU Posted Interrupts
+>Given that hardware support for CPU posted interrupts is available, the task of additionally supporting IOMMU posted interrupts—which directly channel interrupts from assigned devices to their guests without host involvement—is straightforward.
+>
+>![[IOMMU  (VT-d) PI.png]]
+>
+>The main difference between the CPU posted interrupt and IOMMU posted interrupt is that, with IOMMU posted interrupt, an IR table entry may now specify the interrupt vector that the guest expects to receive when its assigned device fires an interrupt,as well as a pointer to the PI descriptor of that guest.
+
+
 
 
 

@@ -58,8 +58,7 @@ source : [Difference between Von Neumann and Harvard Architecture](https://www.g
 # A sketch hypervisor: multiplexing and emulation
 ![[VM_basic_architexture.png]]
 - NIC: network interfalce
-
-
+- PE: processing element
 
 ---
 # Approaches to Virtualization and Paravirtualization

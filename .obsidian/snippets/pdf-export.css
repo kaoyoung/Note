@@ -1,0 +1,287 @@
+@media print {
+
+  /* =========================
+     Base Layout
+  ========================= */
+
+  body {
+    --font-text: "Segoe UI";
+    --font-monospace: "Consolas";
+
+    font-size: 15px;
+    line-height: 1.75;
+
+    color: #222;
+    background: white;
+  }
+
+  .markdown-preview-view {
+    max-width: 920px;
+    margin: auto;
+    padding: 36px;
+  }
+
+  /* =========================
+     Headings
+  ========================= */
+
+  h1, h2, h3, h4 {
+    font-weight: 700;
+    color: #111;
+    page-break-after: avoid;
+  }
+
+  h1 {
+    font-size: 2.0em;
+    margin-top: 1.8em;
+    margin-bottom: 0.8em;
+
+    border-bottom: 2px solid #d8d8d8;
+    padding-bottom: 0.3em;
+  }
+
+  h2 {
+    font-size: 1.45em;
+    margin-top: 1.6em;
+    margin-bottom: 0.7em;
+
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 0.2em;
+  }
+
+  h3 {
+    font-size: 1.2em;
+    margin-top: 1.3em;
+    margin-bottom: 0.5em;
+  }
+
+  h4 {
+    font-size: 1.05em;
+    margin-top: 1em;
+    margin-bottom: 0.4em;
+  }
+
+  /* =========================
+     Paragraphs
+  ========================= */
+
+  p {
+    margin-top: 0.7em;
+    margin-bottom: 0.7em;
+
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* =========================
+     Lists
+  ========================= */
+
+  ul, ol {
+    padding-left: 1.6em;
+    margin-top: 0.5em;
+    margin-bottom: 0.8em;
+  }
+
+  li {
+    margin-bottom: 0.35em;
+  }
+
+  /* =========================
+     Inline Code
+  ========================= */
+
+  code {
+    font-family: var(--font-monospace);
+
+    background: #f3f4f6;
+    color: #c7254e;
+
+    border-radius: 5px;
+
+    padding: 0.12em 0.35em;
+
+    font-size: 0.92em;
+  }
+
+  /* =========================
+     Code Blocks
+  ========================= */
+
+  pre {
+    background: #f6f8fa;
+
+    border: 1px solid #e1e4e8;
+
+    border-radius: 10px;
+
+    padding: 16px 18px;
+
+    overflow-x: auto;
+
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    line-height: 1.55;
+
+    page-break-inside: avoid;
+  }
+
+  pre code {
+    background: transparent;
+    color: #222;
+
+    padding: 0;
+
+    font-size: 0.9em;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* =========================
+     Blockquotes
+  ========================= */
+
+  blockquote {
+    border-left: 4px solid #cbd5e1;
+
+    margin-left: 0;
+    margin-right: 0;
+
+    padding-left: 1em;
+
+    color: #555;
+
+    background: #fafafa;
+
+    border-radius: 6px;
+
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+  }
+
+  /* =========================
+     Tables
+  ========================= */
+
+  table {
+    border-collapse: collapse;
+
+    width: 100%;
+
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    font-size: 0.95em;
+  }
+
+  th, td {
+    border: 1px solid #dcdcdc;
+
+    padding: 8px 12px;
+
+    text-align: left;
+  }
+
+  th {
+    background: #f3f4f6;
+
+    font-weight: 600;
+  }
+
+  tr:nth-child(even) {
+    background: #fafafa;
+  }
+
+  /* =========================
+     Images
+  ========================= */
+
+  img {
+    display: block;
+
+    margin: auto;
+
+    max-width: 100%;
+
+    border-radius: 8px;
+  }
+
+  /* =========================
+     Horizontal Rule
+  ========================= */
+
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+
+  /* =========================
+     Links
+  ========================= */
+
+  a {
+    color: #0366d6;
+    text-decoration: none;
+  }
+
+  /* =========================
+     Page Break Handling
+  ========================= */
+
+  h1, h2, h3, h4,
+  table,
+  pre,
+  blockquote {
+    page-break-inside: avoid;
+  }
+
+  img {
+    page-break-inside: avoid;
+  }
+
+  /* =========================
+     Better PDF Appearance
+  ========================= */
+
+  .markdown-preview-section {
+    page-break-inside: auto;
+  }
+
+  /* =========================
+     Callouts
+  ========================= */
+
+  .callout {
+    border-radius: 10px;
+
+    border: 1px solid #dbeafe;
+
+    background: #f8fbff;
+
+    padding: 12px 14px;
+
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    page-break-inside: avoid;
+  }
+
+  .callout-title {
+    font-weight: 700;
+    margin-bottom: 0.5em;
+  }
+
+  /* =========================
+     Math
+  ========================= */
+
+  .math {
+    overflow-x: auto;
+  }
+
+}

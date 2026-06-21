@@ -16,7 +16,7 @@ sudo chmod 0600 /swapfile
 sudo mkswap /swapfile
 
 # turn on the swap function
-sudo swapon /swapfie
+sudo swapon /swapfile
 ```
 ## Check it
 ```Shell
