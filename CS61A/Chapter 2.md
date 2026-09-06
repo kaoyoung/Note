@@ -213,6 +213,51 @@ print(digits[:-1])  # [1, 8, 2]
 print(digits[0:])   # [1, 8, 2, 8]
 ```
 
+>[!question] 問題一
+>在 python 中 `[0] * n` 會造出一個一維陣列嗎 ？`[[0] * n] * m` 會造出一個二維陣列嗎？如何造出二維陣列在 python 中？
+
+`[0] * n` 會造出一個一維陣列，但 `[[0] * n] * m` 不會造出一個二維陣列。問題的關鍵在於 `[0] * n` 在 python 底層代表何種操作？在 python built-in types 的 Common Sequence Operations 章節中，說明 `s * n` (`s` 代表 sequence `n` 代表一個整數) 為 "equivalent to adding _s_ to itself _n_ times" 更精準地說 "Values of _n_ less than `0` are treated as `0` (which yields an empty sequence of the same type as _s_). Note that items in the sequence _s_ are not copied; they are referenced multiple times."。`s` 內的元素只是被 reference ，所以如果該元素是 mutable 則原地修改只會讓 reference 到這物件的元素一起修改，除非做 rebinding 才會讓該 row 有自己獨立對應的物件
+```python
+table = [[0] * 5] * 5
+table[0][0] = 1
+print(table[0][0])   # 1
+print(table[1][0])   # 1
+print(table[0] is table[1])   # True
+
+table[2][0] = 3
+print(table[0][0])   # 3
+print(table[1][0])   # 3
+
+table[1] = [5, 6, 7, 8, 9]
+print(table[0] is table[1])   # False
+print(table[0][0])   # 3
+print(table[1][0])   # 5
+```
+另一方面，如果該元素如果是 immutable 則不可能被修改，每次做賦值時相當於做一次 rebinding 到另一個物件，這效果類似每個元素都有自己的一份獨立記憶體空間，看如下例子
+```python
+table = [0] * 5
+table[0] = 1
+print(table[0])   # 1
+print(table[1])   # 0
+print(table[2])   # 0
+
+table[2] = 2
+print(table[0])   # 1
+print(table[1])   # 0
+print(table[2])   # 2
+```
+`[0] * n` 跟 `[[0] * n] * m` 的重要差別在於 `[]` 內的元素一個是 mutable 一個是 immutable，immutable 只能被 rebinding 不能原地修改，所以多個 immutable 元素共享參照沒問題，一有更動即刻做 rebinding 影響不到其他人。
+想要造出一個二維陣列可以用如下的方法
+```python
+table_2d = []
+for _ in range(5):
+	table_2d.append([0] * 5)
+
+# 簡化版	
+table_2d = [[0] * 5 for _ in range(5)]
+```
+在每次 `table_2d.append([0] * 5)` 都會重新造出一個 list 所以 row 跟 row 之間不影響，同時 `[0] * 5` 可以視為一個一維陣列，所以 `table_2d = [[0] * 5 for _ in range(5)]` 成功造出一個二維陣列。
+
 >[!note] 概念三
 >A range is another built-in type of sequence in Python, which represents a range of integers.
 
@@ -267,12 +312,12 @@ digits = [1, 8, 2, 8]
 print(str(2) + ' is an element of ' + str(digits))
 ```
 
->[!question] 問題一
+>[!question] 問題二
 >"String literals can express arbitrary text, surrounded by either single or double quotation marks." 這句話真的表示單引號跟雙引號功能一樣嗎 ?
 
 單雙引號是等價的寫法，差別在於跳脫 (escape) 的便利性，字串內用單引號，外部就要用雙引號，同理在雙引號上。
 
->[!question] 問題二
+>[!question] 問題三
 >Python 中沒有 character 的概念嗎 ? 是比較 C/C++ 跟 Python 對於 string 觀念的差異 ?
 
 在 python 中只有 string 沒有 character，`a` 只是一個長度為一的字串。在 python 中不用 `\0` 放在字串尾巴表示字串終結，因為 python 的 string 本身帶長度的訊息，所以可以直接判斷是不是在字串的範圍。
@@ -556,8 +601,6 @@ def f(x, acc=[]):   # 危險!預設值只建立一次
 >為何不會出現 unbounderror? 我記得在函式內賦值時，會讓該變數綁定在 local frame
 
 你記得規則是對的，但函式在呼叫 (`f(x)`) 時，就已經把 `lst` 綁到 `x` 所指的物件上，所以 `lst.append(4)` 是對 `x` 所指物件的操作，`lst = [9, 9]` 是把 `lst` 重新綁到 `[9, 9]` 這物件上。
-
-
 
 ---
 # Section 2.5 (Object-Oriented Programming)
@@ -919,12 +962,147 @@ print(jack_acct['get']('deposit')(20))   # 20
 >[!note] 概念一
 >A central concept in object abstraction is a _generic function_, which is a function that can accept values of multiple different types.
 
-抽象調物件的型別，讓呼叫者可專注在物件的值上而非型別，函式內部再自己處理。造出一個可自適應多種輸入物件的函式，我們叫他 _generic function_。**關鍵在於降低呼叫者的認知負擔**。
+抽象調物件的型別，讓呼叫者可專注在物件的值上而非型別，函式內部再自己處理。造出一個可自適應多種輸入物件的函式，我們叫他 _generic function_。**關鍵在於降低呼叫者的認知負擔**。Generic Functions 有三種常見的實作手段
+- Shared Interfaces
+- Type Dispatching
+- Type Coercion
+
+>[!note] 概念二
+>Python stipulates that all objects should produce two different string representations: one that is human-interpretable text and one that is a Python-interpretable expression.
+
+Python 規定所有 object 需要有兩種形式的 string representation，一種是給人類看的由 `__str__` method 處理，一種是給 interpreter 或是 interactive mode 看的由 `__repr__` method 處理。
+
+>[!question] 問題一
+>所有 object 都要有兩種形式的 string representation，可是我在寫 class 時可以不寫 `__repr__`、`__str__` method 阿?
+
+在 python reference 的 Data Model 章節中對於 `__repr__` method 說明 "A default implementation is provided by the [`object`](https://docs.python.org/3/library/functions.html#object "object") class itself."  而 `__str__` method 說明為 "The default implementation defined by the built-in type [`object`](https://docs.python.org/3/library/functions.html#object "object") calls [`object.__repr__()`](https://docs.python.org/3/reference/datamodel.html#object.__repr__ "object.__repr__")."。由以上說明可以知道自訂義  class 不寫的話由 object 這類別預設的 `__repr__`、`__str__` method 處理。在 `__repr__` method 說明有一段話為 "This is typically used for debugging, so it is important that the representation is information-rich and unambiguous." 可以知道  `__repr__` method 提供了物件一個無歧異 (不一定唯一) 的表示。
+
+>[!note] 概念三
+>In Python, functions are first-class objects, so they can be passed around as data and have attributes like any other object. Python also allows us to define objects that can be "called" like functions by including a `__call__` method.
+
+函式有以特性是可以直接用 `()` 來呼叫，而物件有可以用此方法來呼叫一個其中的 method (`()` 會觸發 `__call__`)，具體操作如下
+```python
+class Adder(object):
+	def __init__(self, n):
+		self.n = n
+	def __call__(self, k):
+		return self.n + k
+
+add_three_obj = Adder(3)
+print(add_three_obj(4))   # 7
+```
+函式因為 closure 的關係可以視為資料和方法的組合，而物件有 attribute 跟 method 的觀念也可以有一樣的想法。在引進 `__call__` method 兩者也可以享有類似的呼叫方式。這觀念試著模糊函式跟物件的差別。
+
+>[!note] 概念四
+>The data-abstraction barriers that isolate representation from use, we need abstraction barriers that isolate different design choices from each other and permit different choices to coexist in a single program.
+
+資料的抽象化讓「表示方式」和「使用方式」分離，可減少使用者的認知負擔。在 large software system 的建造中需要多人經過長時間的才能完成，不同人之間或是同一個人在不同時間對於同一類型資料的表達方式可能不同，例如複數可以用 polar form 或是 rectangular form，因此要更進一步的抽象，讓不同的設計選擇在同一程式中共存。
+
+>[!note] 概念五
+>根據以下程式回答問題
+>```python
+>class Number:
+>	def __add__(self, other):
+>		return self.add(other)
+>	def __mul__(self, other):
+>		return self.mul(other)
+>```
+>1. 為何這個程式沒有 `__init__` method?
+>2. 這 class 的 `__add__`、`__mul__` method 為何要呼叫不存在的 `add`、`mul` 函式?
+
+這個 class 沒有 `__init__` 代表他不需要自己的 instance attribute，由 object 類別來進行默認處理。這 class 只實作了 `__add__`、`__mul__` 介面，讓使用者可以直接用 `+` 跟 `*` 來操作，而具體細節由子類別處理，這代表它想要做 base class 給別人繼承。子類別實作如下
+```python
+class Complex(Number):
+	def add(self, other):
+		return ComplexRI(self.real + other.real, self.imag + other.imag)
+	def mul(self, other):
+		magnitude = self.magnitude * other.magnitude
+		return ComplexMA(magnitude, self.angle + other.angle)
+```
+This implementation assumes that two classes (ComplexRI, ComplexMA) exist for complex numbers, corresponding to their two natural representations:
+- ComplexRI constructs a complex number from real and imaginary parts.
+- ComplexMA constructs a complex number from a magnitude and angle.
+
+>[!question] 問題二
+>在 Complex class 之下需要 ComplexRI、ComplexMA 這兩類別，而這兩類別都是同一複數的不同表達，在使用時都可能出現，如何讓這兩者都提供在 Complex class 所需的 `real, imag, magnitude, angle` 這四個 attribute?
+
+使用到 python 的 `@property` 裝飾器，這裝飾器可以讓 method 的呼叫少去函式呼叫所需的括號 (`()`)。具體程式如下
+```python
+class ComplexRI(Complex):
+        def __init__(self, real, imag):
+            self.real = real
+            self.imag = imag
+        @property
+        def magnitude(self):
+            return (self.real ** 2 + self.imag ** 2) ** 0.5
+        @property
+        def angle(self):
+            return atan2(self.imag, self.real)
+        def __repr__(self):
+            return 'ComplexRI({0:g}, {1:g})'.format(self.real, self.imag)
+```
+用了 `@property` 這 decorator 我們變可以直接用 `self.magnitude` 跟 `self.angle` 在 ComplexRI 這 class 在屬性被存取的那一刻才計算出對應的 `magnitude, angle` 值，如此我們便可以把計算出來的值偽裝成屬性。
+
+>[!important] Shared Interface 在以上例子的體現
+>在 Complex 的 `add`、`mul` 這兩 method 中只用到 `real, imag, magnitude, angle` 這幾個 attribute，所以以 Complex 為 base class 所做出的子類別，只需要做完 Complex 的 shared Interface (`real, imag, magnitude, angle`) 這幾個 attribute 就行，可以用 instance attribute, class attribute, or method with `@property` 來處理。`ComplexRI, ComplexMA` 這兩物件可以混和運算，呼叫端完全不管其內實作，便是因為他倆符合 shared interface 的要求。
+
+>[!note] 概念六
+>**Type dispatching.** One way to implement cross-type operations is to select behavior based on the types of the arguments to a function or method.
+
+這個做到 generic function 的手段單純窮舉，把所有可能的 type 與其對應的 function 或是 method 給搞出來。看以下例子
+```python
+Rational.type_tag = 'rat'
+Complex.type_tag = 'com'
+
+class Number:
+        def __add__(self, other):
+            if self.type_tag == other.type_tag:
+                return self.add(other)
+            elif (self.type_tag, other.type_tag) in self.adders:
+                return self.cross_apply(other, self.adders)
+        def __mul__(self, other):
+            if self.type_tag == other.type_tag:
+                return self.mul(other)
+            elif (self.type_tag, other.type_tag) in self.multipliers:
+                return self.cross_apply(other, self.multipliers)
+        def cross_apply(self, other, cross_fns):
+            cross_fn = cross_fns[(self.type_tag, other.type_tag)]
+            return cross_fn(self, other)
+        adders = {("com", "rat"): add_complex_and_rational,
+                  ("rat", "com"): add_rational_and_complex}
+        multipliers = {("com", "rat"): mul_complex_and_rational,
+                       ("rat", "com"): mul_rational_and_complex}
+```
+
+>[!important] class attribute 跟 instance attribute 的新增
+>class attribute 跟 instance attribute 可以不在 class 中定義，直接靠 `Rational.type_tag = 'rat'` 在 Rational class 中新增一個 `type_tag` 的 attribute。究其原因是因為 class 跟 instance 的 attribute 底層是依靠 dict 實作，所以可以直接新增就如同在 dict 加一個元素。設計原因是因為 python 把「結構檢查」從編譯期移到執行期，以換取極大靈活性。
 
 
+>[!note] 概念七
+>Often the different data types are not completely independent, and there may be ways by which objects of one type may be viewed as being of another type. This process is called _coercion_.
 
-
-
+在上面一個介紹 type dispatching 的方法是依靠窮舉，但有些 type 之間不一定是完全獨立的，即可以靠一些手段轉過去，例如複數和有理數之間，顯然有理數可以輕鬆轉成複數的形式。看如下例子
+```python
+class Number:
+        def __add__(self, other):
+            x, y = self.coerce(other)
+            return x.add(y)
+        def __mul__(self, other):
+            x, y = self.coerce(other)
+            return x.mul(y)
+        def coerce(self, other):
+            if self.type_tag == other.type_tag:
+                return self, other
+            elif (self.type_tag, other.type_tag) in self.coercions:
+                return (self.coerce_to(other.type_tag), other)
+            elif (other.type_tag, self.type_tag) in self.coercions:
+                return (self, other.coerce_to(self.type_tag))
+        def coerce_to(self, other_tag):
+            coercion_fn = self.coercions[(self.type_tag, other_tag)]
+            return coercion_fn(self)
+        coercions = {('rat', 'com'): rational_to_complex}
+```
+從上述例子可以看出 type coercion 的一個短版，即精度或是資訊可能流失，正如這邊的 `rational_to_complex` 把有理數轉成浮點數，不可避免的造成一些精度流失。Type coercion 不只如上手段，還可以轉成把兩 type 轉成第三的 type 或是定義一個 coercion chainning。
 
 ---
 # Section 2.8 (Efficiency)

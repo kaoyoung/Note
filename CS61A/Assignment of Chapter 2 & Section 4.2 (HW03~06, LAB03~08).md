@@ -1,6 +1,151 @@
 # HW03
 
+>[!question] 問題一
+>以下用來算總共有幾種找零方式的程式，有沒有可取的地方 ?
+>```python
+> def next_smaller_dollar(bill):
+>"""Returns the next smaller bill in order."""
+>	if bill == 100:
+>		return 50
+>	if bill == 50:
+>		return 20
+>	if bill == 20:
+>		return 10
+>	elif bill == 10:
+>		return 5
+>	elif bill == 5:
+>		return 1
+>
+>def count_dollars(total):
+>	@lru_cache(maxsize=None)     # 等同於 @cache
+>	def count_helper(bill, current_value):
+>		if(current_value == 0):
+>			return 1
+>		elif(current_value < 0):
+>			return 0
+>		if(bill == 1):
+>			return 1
+>		return count_helper(bill, current_value - bill) + count_helper(next_smaller_dollar(bill), current_value) 
+>	return count_helper(100, total)		
+>```
 
+這程式有三個巧思
+1. 定義一個順序，讓多個相同的找零組合只計算一次 (EX: (5,1,1),  (1,5,1), (1,1,5)，只能算一次)。
+2. 用 nested function 讓 API 接口更乾淨。
+3. 用 memoization (`@lru_cache(maxsize=None)`) 使得遞迴呼叫的過程，程式會把函式的引數 (argument) 跟其對應結果記在記憶體中，讓後續調用時不用建立函式 frame 直接拿結果。
+
+先說明一下第一個巧思，在思考多個代表相同意思的組合只能算一次的問題時，主要有兩種常見思路
+3. 一次找完再去重
+4. 定義一個順序，使的在找的過程中多個代表相同意思的組合只會出現一次
+第一個思路類似於資料後處理，適合用在找的過程的算法無法更動，這時只好在原本算法的結果上做處理。第二個思路是基於一個觀察「多個代表相同意思的有序序列常常只是一個組合的不同排列」，所以只要在組合時強制規定一個順序，使其組合唯一，那結果就符合要求。
+第二個巧思是來自於一個直覺的想法「只想知道一個金額的找零組合，我在呼叫 API 時應該只需要輸入金額」，所以 `count_dollars()` 只有一個金額的參數，至於在實作時需要知道的目前幣值，則是在呼叫 nested function 中內部的函式時來處理，外層看不到。
+
+>[!question] 問題二
+>請依據以下程式回答問題
+>```python
+>def make_anonymous_factorial():
+>	return (lambda f: lambda x: x if x == 1 else x * f(f)(x - 1))(lambda f: lambda x: x if x == 1 else x * f(f)(x - 1))
+>	# return (lambda f: f(f))(lambda f: lambda x: 1 if x==1 else x * f(f)(x-1))
+>```
+>1. `return (lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))(lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))` 跟 `return (lambda f: f(f))(lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))` 在幹麻？他兩設計理念的差別在哪？
+>2. `return (lambda f: lambda x: x if x == 1 else x * f(f(x - 1)))(lambda f: lambda x: x if x == 1 else x * f(f(x - 1)))`　這樣寫是對的嗎？
+>3. 如果寫 `return (lambda f: lambda x: 1 if x == 1 else x * f(x - 1))(lambda f: lambda x: 1 if x == 1 else x * f(x - 1))` 錯在哪？
+>4. 解釋一下 U Combinator 跟 Y Combinator 的想法？
+
+這兩程式都是在計算給定 `x` 的階層值，特點都是在不聲明函式名稱的情況下實現遞迴呼叫。先說明以下程式
+```python
+return (lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))(lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))
+```
+要理解這函式，先做一個 name binding
+```python
+g1 = lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1)
+```
+這個函式 `g1` 可以作如下翻譯
+```python
+def g1(f):
+    def h(x):                      
+        if x == 1:
+            return 1
+        else:
+            return x * f(f)(x - 1)  
+    return h
+```
+`g1` 是一個吃 `f` 的函式並吐出 `h` 的函式，`h` 本身是一個吃 `x` 的函式，該函式依靠 `f` 做遞迴處理。接下來可以令
+```python
+g2 = lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1)
+```
+所以
+```python
+return (lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))(lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))
+```
+可以寫成
+```python
+return g1(g2)
+```
+剖析 `g1(g2)(3)` 之前又有一個概念:「C/C++、Rust、Python 是嚴格語言 (strict evaluation)」，嚴格語言代表一個函式被呼叫前只做兩件事
+1. 把引數 (argument) 的值算出來。
+2. 把引數的值綁到參數 (parameter) 上並運行函數本體。
+而目前 `g1` 的引數 `g2` 的值就是 lambda 函式本身 (其本身就代表一個運算過程)，所以直接把 `g2` 灌進 `g1` 內，即 `g1` 的 `f` 被 `g2` 替代。目前整個函示變為
+```python
+def g1(f):
+    def h(x):                      
+        if x == 1:
+            return 1
+        else:
+            return x * g2(g2)(x - 1)  
+    return h
+```
+接下來把 `x=3` 帶入，求 `3 * g2(g2)(2)` ，現在 `g2` 的 `f` 便是他自己，如此完成自我的呼叫，並把 `x=2` 帶入並自我呼叫一下，再來變到達終止處 `x=1`。整個過程如下
+```text
+g1(g2)(3)
+= 3 * g2(g2)(2)
+= 3 * 2 * g2(g2)(1)
+= 3 * 2 * 1
+```
+這邊 `g2` 的自我呼叫，詳情如下 (`f` 為 `g2`)
+```python
+def g2(f):
+    def h(x):                      
+        if x == 1:
+            return 1
+        else:
+            return x * f(f)(x - 1)  # return x * g2(g2)(x-1)
+    return h
+```
+可以看到終止條件是 `x == 1`，而在遞迴時是靠自己呼叫自己達成。跟一般用函式名字做遞歸不同，這邊靠的是 `g2` 吃進自己 (`g2`) 並用 `f(f)` 來使得下一層呼叫存在。
+接下來考慮以下程式
+```python
+return (lambda f: f(f))(lambda f: lambda x: 1 if x == 1 else x * f(f)(x - 1))
+```
+依舊做一下 name binding
+```python
+g1 = lambda f: f(f)
+```
+`g1` 可以寫成
+```python
+def g1(f):
+	return f(f)
+```
+依舊只要把前面的 `g2` 傳入這邊的 `f` 問題變結束。
+
+>[!note] 前面說明的兩行程式的思想與差別
+>這題想表達得是，我們可以不靠函式名字來呼叫函式來達到遞迴的過程。為了達到遞迴，我們必須要出現一個在不符合終止條件時，依舊能繼續創造一個新的函式 (該函式和原函式一樣，跟一般遞迴呼叫函示名字一樣)，來表達新的轉移狀態。前述的創造一個新函式便是用 `f(f)` 來做到，而你要用哪個遞回函式變是指定 `f` 為你要的函式，這函式變是用第二個 lambda 來傳遞。所以第一個 lambda 變是提供第一個開始互相自我應用的地方，而接下來的遞迴函式變由第二個 lambda 提供。
+>兩個寫法其實都一樣，只是第二個寫法把第一個開始互相引用寫得更乾淨。
+
+以下寫法是有問題的
+```python
+return (lambda f: lambda x: x if x == 1 else x * f(f(x - 1)))(lambda f: lambda x: x if x == 1 else x * f(f(x - 1)))
+```
+第一個是程式呼叫過程會導致錯誤。先做一下 name binding
+```
+g = lambda f: lambda x: x if x == 1 else x * f(f(x - 1))
+```
+取 `x=2` 會有以下結果
+```python
+g(g)(2)
+= 2 * g(g(1))
+```
+錯誤是 `2` 是 int 而 `g(g(1))` 是一個函式物件 (`g(g(1))` 是函式,要再 apply 一個引數才可能變成數值)，相乘會 typeerror。第二個問題是 `f(f(x - 1))` 內的 `f(x - 1)` 把要傳遞的函式破壞掉，提前把引數放入，而不是把函式放入，不是遞迴所想的是。
 
 
 ---
@@ -68,11 +213,6 @@ C/C++ 跟 Python 在設計此類資料結構的思路本就不同。C/C++ 索引
 ---
 # LAB04
 
-
-
-
-
-
 ---
 # HW05
 
@@ -96,97 +236,12 @@ C/C++ 跟 Python 在設計此類資料結構的思路本就不同。C/C++ 索引
 >1. 詳細的解釋一下這程式在幹嘛?
 >2. `yield` statement 時函式不是被停止了，為何他會向遞迴一樣向 caller 回傳值，該 caller 還可以向它的 caller 回傳?
 >3. 跟一般的遞迴差在哪?
+>4. 將 `yield []` 改成 `return []` 會怎樣?
 
-這是個遞迴的函式，用來產生登上樓梯的方法。由 `yield` statement 可以知這程式是個 generator function，使用 `next` function 來遍歷所有可能的方法。整個程式關鍵點在於 `for solution in stair_ways(n - step):` 這一行，因為 `stair_way` 這函式是個 generator function，所以呼叫 `stair_way` 這函式時會回傳 generator，再用 `next` 遍歷所有可能。關於 `yield` statement 停止程式的問題，確實在 `yield` 那行時該函式停止，但 caller 跟 callee 之間是用 `next` function 取值，callee 用 `yield` 回傳值給 caller 後，callee 確實停止了，但 caller 依舊會用自己的 `yield` 回傳，一路傳到遞迴的一開始，所以對整個遞迴的輸出沒問題。整體來說跟一般的遞迴差不多，重點在於求值的時間，這程式是 lazy 求值的只有在呼叫 `next` 時算值 (這邊的回傳是用 `next` function 一次蹦一個)，一般的遞迴是 eager 求值的，一次產生所有登上樓梯的方式。
+這是個遞迴的函式，用來產生登上樓梯的方法。由 `yield` statement 可以知這程式是個 generator function，使用 `next` function 來遍歷所有可能的方法。整個程式關鍵點在於 `for solution in stair_ways(n - step):` 這一行，因為 `stair_ways` 這函式是個 generator function，所以呼叫 `stair_ways` 這函式時會回傳 generator，再用 `next` 遍歷所有可能。關於 `yield` statement 暫停程式的問題，確實在 `yield` 那行時該函式暫停，但 caller 跟 callee 之間是用 `next` function 取值，callee 用 `yield` 回傳值給 caller 後，callee 確實暫停了，但 caller 依舊會用自己的 `yield` 回傳，一路傳到遞迴的一開始，所以對整個遞迴的輸出沒問題。整體來說跟一般的遞迴差不多，重點在於求值的時間，這程式是 lazy 求值的只有在呼叫 `next` 時算值 (這邊的回傳是用 `next` function 一次蹦一個)，一般的遞迴是 eager 求值的，一次產生所有登上樓梯的方式。當一個程式因為 `yield` 變為 generator 時，return statement 只會~~呼叫~~ raise `StopIteration` ，caller 不會拿到 return 的那個物件，所以如果這邊把 `yield []` 改成 `return []` ，只會~~呼叫~~ raise `StopIteration([])` 而 `[]` 儲存在 `StopIteration.value` ，不會回傳 `[]` 給 caller。把 `yield []` 改成 `return []` 有一錯誤是 `stair_ways(n)` 一定沒有輸出，因為 `yield [step] + solution` 需要 `stair_ways` 要有輸出，而 `n == 0` 這 base case 沒輸出，所以整體沒有任何輸出。
 
 ---
 # LAB05
-
->[!question] 問題一
->根據以下程式回答問題
->```python
->s = [6, 7, 8]
->print(s.append(6))
->```
->1. 輸出是啥?
->2. 為啥要這樣設計? 時間複雜度是啥?
-
-
-
-
-
-
->[!question] 問題二
->根據以下程式回答問題
->```python
->s = [6, 7, 8, 6]
->print(s.insert(0, 9))
->print(s)
->```
->1. 輸出是啥
->2. 為啥要這樣設計? 時間複雜度是啥?
-
-
-
-
-
-
->[!question] 問題三
->根據以下程式回答問題
->```python
->s = [9, 6, 7, 8, 6]
->x = s.pop(1)
->print(x)
->print(s)
->```
->1. 輸出是啥?
-
-
-
-
-
->[!question] 問題四
->根據以下程式回答問題
->```python
->s = [9, 6, 7, 8, 6]
->x = s.pop(1)
->print(s.remove(x))
->print(s)
->```
->1. 輸出是啥? 時間複雜度是多少?
-
-
-
-
-
-
-
->[!question] 問題五
->根據以下程式回答問題
->```python
->a = [9, 7, 8]
->print(a.pop())
->```
->2. 輸出是啥?
->3. 為啥這樣設計?
-
-
-
-
-
-
-
->[!question] 問題六
->根據以下程式回答問題
->```python
->s = [3, 4, 5]
->s.extend([s.append(9), s.append(10)])
->print(s)
->```
->4. 輸出是啥?
->5. 為啥這樣設計?
-
-
 
 
 
@@ -270,9 +325,31 @@ C/C++ 跟 Python 在設計此類資料結構的思路本就不同。C/C++ 索引
 ---
 # HW06
 
+>[!Question] 問題一
+>考慮以下程式並試回答問題
+>```python
+>def deep_map_mut(func, s):
+>"""Mutates a deep link s by replacing each item found with the
+>result of calling func on the item. Does NOT create new Links (so
+>no use of Link's constructor).
+>Does not return the modified Link object.
+>>>> link1 = Link(3, Link(Link(4), Link(5, Link(6))))
+>>>> print(link1)
+><3 <4> 5 6>"""
+>	if s is Link.empty:
+>		return
+>	if isinstance(s.first, Link):
+>		deep_map_mut(func, s.first)
+>	else:
+>		s.first = func(s.first)
+>		
+>	deep_map_mut(func, s.rest)
+>	return
+>```
+>1. 這邊的 `isinstance(s.first, Link)` 在解決甚麼問題 ?
+>2. 為什麼要用遞迴處理這程式 ?
 
-
-
+用 `isinstance(s.first, Link)` 是因為 `s` 是一個 deep link 無法保證 `s.first` 是一個值，所以需要 `isinstance(s.first, Link)` 來處理 `s.first` 是一個 Link class 的情況。在 deep link 中我們無法知道要經過多少個 `s.first` 才能達到 `s.first` 是值的情況，同時 Link class 是用遞迴定義，所以用遞迴是一個很自然的選擇。
 
 ---
 # LAB06
@@ -309,6 +386,50 @@ C/C++ 跟 Python 在設計此類資料結構的思路本就不同。C/C++ 索引
 >```
 >1. class 之間的分割邏輯是啥?
 >2. 這邊為啥在 `return self.cents + max(0, (Mint.present_year - self.year - 50))` 用 `Mint.present_year`?
+>3. 為何在 Mint class 的 `__init__` method 中呼叫 update method 要用 `self.update()` 不直接用 `update()` 就好
 
-Mint 是鑄幣廠負責產出 Coin，所以有 create method 負責產出。Coin 的價值包含兩個指標，一個是本身價值由 `cents` 這 class attribute 表達，另一個歷史價值 (放得越久價格可能更高) 由鑄幣廠現在年份減去 Coin 鑄造年份再減去 50 的值體現，這值跟 0 取 max 即為歷史價值。需要注意這邊 Mint class 跟 Coin class 之間的關係是 create-a 而不是 is-a 或是 has-a，會這樣設計是因為 Coin 不是 Mint 的一個特化，Coin 也不是 Mint 組成的一部分，而是 Mint 造出來的一個 instance。Nickle 跟 Dime 才是 is-a 的關係，因為他倆是 Coin 的一個特例。這邊在 `return self.cents + max(0, (Mint.present_year - self.year - 50))` 用 `Mint.present_year` 是因為歷史價值要對其 Mint 的時間，所以直接用 `Mint.present_year` 把 Mint attribute 取出來是最合理的 (你直接用 `self.present_year` 也不行，因為 Coin 沒有繼承自 Mint)。
+Mint 是鑄幣廠負責產出 Coin，所以有 create method 負責產出。Coin 的價值包含兩個指標，一個是本身價值由 `cents` 這 class attribute 表達，另一個歷史價值 (放得越久價格可能更高) 由鑄幣廠現在年份減去 Coin 鑄造年份再減去 50 的值體現，這值跟 0 取 max 即為歷史價值。需要注意這邊 Mint class 跟 Coin class 之間的關係是 create-a 而不是 is-a 或是 has-a，會這樣設計是因為 Coin 不是 Mint 的一個特化，Coin 也不是 Mint 組成的一部分，而是 Mint 造出來的一個 instance。Nickle 跟 Dime 才是 is-a 的關係，因為他倆是 Coin 的一個特例。這邊在 `return self.cents + max(0, (Mint.present_year - self.year - 50))` 用 `Mint.present_year` 是因為歷史價值要對其 Mint 的時間，所以直接用 `Mint.present_year` 把 Mint attribute 取出來是最合理的 (你直接用 `self.present_year` 也不行，因為 Coin 沒有繼承自 Mint)。對於第三題，在 python charpter 4 (Execution model) 中的描述已經回答 "Names in class scope are not accessible. Names are resolved in the innermost enclosing function scope. If a class definition occurs in a chain of nested scopes, the resolution process skips class definitions. This rule prevents odd interactions between class attributes and local variable access. If a name binding operation occurs in a class definition, it creates an attribute on the resulting class object. To access this variable in a method, or in a function nested within a method, an attribute reference must be used, either via self or via the class name." 重點在於 "If a class definition ..., the resolution process skips class definitions" ，method 裡的名字解析會跳過外層 class 的 scope，所以 class body 裡定義的名字（不管是 attribute 還是 method）在 method 內都不能用裸名存取，必須透過 attribute reference（`self.update()` 或 `Mint.update(self)`），這樣可以避免ㄧ些奇怪的狀態，如下面的例子
+```python
+class Counter:
+    count = 0
+    def increment(self):
+        count = count + 1   # 這行該是什麼意思？ count 要看 local 的還是 class attribute 的
 
+class C:
+    x = 1
+    def f(self):
+        return x   # 假設這能看到 class scope，回傳 1？
+
+del C.x            # 執行期把 class attribute 刪掉
+C().f()            # 現在這個 x 是什麼？NameError？還是 fallback 到 global？
+
+c = C()
+c.x = 99
+c.f()   # 裸名 x 該回傳 1（class）還是 99（instance）？
+```
+如果允許 method 內的裸名解析到 class scope，同一個名字會同時受「scope 鏈查找」和「attribute 查找」兩套規則影響（後者還是動態的，會被 `del`、instance 遮蔽改變），語意無法確定。強制用 `self` 或 class name 存取，讓兩套查找系統各自獨立，這就是 "prevents odd interactions" 的意思。
+
+---
+# LAB07
+
+>[!Question] 問題一
+>```python
+>class FreeChecking(Account):
+>	withdraw_fee = 1
+>	free_withdrawals = 2
+>	"*** YOUR CODE HERE ***"
+>	def withdraw(self, amount):
+>		fee = 0
+>		if self.free_withdrawals != 0:
+>			self.free_withdrawals -= 1
+>		else:
+>			fee = self.withdraw_fee
+>		return super().withdraw(amount + fee)
+>```
+>1. 為何這邊用 `super()` ?
+>2. 為何不用 `Account.withdraw(self, amount + fee)` 而用 `super().withdraw(amount + fee)` ?
+
+這邊的 `super()` 是想直接用父類別的函式來處理，這符合繼承的想法「能調用父類別的就調用」。直接使用 `super()` 可以讓直譯器依照 MRO (Method Resolution Order)，去找該調用哪個父類別，還有一個好處是 `super()` 會用 bound method 讓傳參時少 `self` 這參數。另一方面，如果使用 `Account.withdraw(self, amount + fee)` 相比用 `super()` 要多傳一個 `self` 這參數，還有一個問題是如果 `FreeChecking(Account)` 中的 `Account` 被替換成其他父類別，那 `Account.withdraw(self, amount + fee)` 要換成替換的那個父類別。
+
+---
+# LAB08

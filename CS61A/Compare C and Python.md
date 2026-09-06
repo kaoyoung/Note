@@ -67,3 +67,4 @@
 - mutable object
 - function vs. callable object
 - dunder 方法
+- class attribute、instance attribute 可以隨便加
