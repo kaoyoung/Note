@@ -14,11 +14,16 @@
 
 這幾個問題都關於記憶體。先說一下 memory leak (記憶體洩漏)，如果你向記憶體要了一段記憶體空間，在使用之後沒有還回去，該記憶體空間便會被一直占用，如下例子
 ```C
+// char name[10] = malloc(10*sizeof(char));
 char name[10] = malloc(10*sizeof(char));
 
 // if you forget to type the following code, after using this char array, it will cause memory leakage
 // free(name)
 ```
+
+>[!Note] `char name[10] = malloc(10*sizeof(char));` 這寫法是錯的
+>`malloc()` 會回傳一個 pointer 而 `char name[10]` 是一個 array 且這時 `char name[10]` 不會 decay 成 pointer，所以會報錯(error: invalid initializer)。對於何時 array 會 decay 成 pointer 可以參考這一篇 [[C Programming FAQs (Section 6 Array and Pointer)]]。
+
 double deletion 的發生主要原因在於記憶體空間會重複使用，假如重複釋放一個物件，那該記憶體位置的值會被清空兩次，而在第一次清空記憶體位置時，該位置會被放入 free list 的清單供 OS 來調度，之後第二次刪除時，該記憶體位置可能已經分配給別人，所以有可能刪除到別人的資料，如下例子
 ```C
 char name[10];
@@ -261,10 +266,7 @@ Best Practices
 - Use noexcept for move constructor and move assignment operator
 - Consider using smart pointers to avoid manual resource management whenever possible
 
-
-
-
-
-
 >[!question] 問題二
 >為何 destructor, copy constructor, copy assignemnt operator, move constructor, move assignement operator 做出來後可以確保安全? 這是最少的操作嗎
+
+
