@@ -55,6 +55,8 @@
 
 ---
 # Other
+- Python 沒有獨立的字元型別；C 沒有字串型別。
+	- 舉體說明可以看這篇文章 [[為何 python 的 char 直接用 string 表達不用 ASCII]]
 - string vs. character
 - closure
 - tuple unpacking
