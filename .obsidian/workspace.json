@@ -36,20 +36,6 @@
             }
           },
           {
-            "id": "0af85ae650625706",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "git 筆記.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "git 筆記"
-            }
-          },
-          {
             "id": "bd26bd8228119134",
             "type": "leaf",
             "state": {
@@ -62,9 +48,37 @@
               "icon": "lucide-file",
               "title": "Compare C and Python"
             }
+          },
+          {
+            "id": "4fc98bb172d7eb1d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "待做清單.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "待做清單"
+            }
+          },
+          {
+            "id": "5ebdfc707e9560e7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Git/git 筆記.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "git 筆記"
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -123,7 +137,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
+    "width": 386.5,
     "collapsed": true
   },
   "right": {
@@ -229,14 +243,22 @@
       "bases:建立新的 base": false
     }
   },
-  "active": "0af85ae650625706",
+  "active": "5ebdfc707e9560e7",
   "lastOpenFiles": [
+    "Git/git rebase picture.png",
+    "Pasted image 20260906011313.png",
+    "Pasted image 20260906010816.png",
+    "Pasted image 20260905232530.png",
+    "Pasted image 20260511163200.png",
+    "Linux_command/Linux_command picture/data stream redirection.png",
+    "Git/git 筆記.md",
+    "待做清單.md",
     "C Programming FAQs (Section 6 Array and Pointer).md",
-    "git 筆記.md",
+    "CS61A/Compare C and Python.md",
+    "數據結構與算法/二分搜思路總結.md",
     "Perf 介紹.md",
     "Untitled.md",
     "CS61A/Assignment of Chapter 2 & Section 4.2 (HW03~06, LAB03~08).md",
-    "CS61A/Compare C and Python.md",
     "C Programming FAQs (Section 7 Characters and Strings).md",
     "CS61A/Chapter 2.md",
     "CS61A/Chapter 4.md",
@@ -256,11 +278,7 @@
     "CS61A",
     "微積分/极限理论(数列极限)/2.3 數列收斂的判別方法.md",
     "線性代數",
-    "微積分/极限理论(数列极限)/2.1 數列.md",
-    "微積分/极限理论(数列极限)/2.4  實數系統基本定理.md",
-    "虛擬機器/VM Final Project setting and configuration.md",
     "Untitled.base",
-    "Pasted image 20260511163200.png",
     "Rust Book/Rust_Picture/integer bit length.png",
     "OS/XV6",
     "Rust Book/Rust_Picture/Data Type.png",

@@ -15,6 +15,13 @@
 >`int *b1[10]` 跟 `int (*b2)[10]` ~~差在哪~~?
 
 
+
+
+
+
+
+
+
 >[!question]
 > 二為數組跟 pointer to pointer to type T 一樣嗎?
 
