@@ -32,6 +32,7 @@ Git 基本的資料結構為 blob (binary large object) object、 tree object �
 ### refs 目錄
 
 `refs/heads` 儲存 branch 的名字和其對應 commit。
+`refs/tags` 儲存 tag
 
 
 
@@ -46,7 +47,7 @@ git 裡總共有三個分區: working directory (工作目錄)、staging area (�
 
 >`git add .` 跟 `git add --all` 在現在的主要差別在於範圍：`git add .` 處理**當前目錄**以下（包含所有子目錄）的檔案，`git add --all` 處理**整個專案**的檔案。兩者都會把新增、修改的檔案的完整內容存一份到 staging area，並把已刪除的檔案從 staging area 移除。`git add *` 由 shell 展開，會漏掉隱藏檔和已刪除的檔案。
 
-取消暫存用 `git restore --staged welcome.html`。`git rm --cached welcome.html` 則是讓 Git 停止追蹤這個檔案（保留工作目錄的檔案）；如果檔案已經 commit 過，下次 commit 後它會從 repository 裡被刪除。
+把上一次 commit 的檔案覆蓋在 index 的檔案用 `git restore --staged welcome.html`。把 index 的檔案覆蓋 working directory 的檔案用 `git restore welcome.html`。`git rm --cached welcome.html` 則是讓 Git 停止追蹤這個檔案（保留工作目錄的檔案）；如果檔案已經 commit 過，下一個 commit 的 snapshot 就不會包含它，但舊的 commit 裡仍然有這個檔案。
 
 >[!note] 如何看 `git status` 的輸出
 >untracked 表示在 working directory ，git 管不到。changes not staged 表示 working directory 的版本和 staging area 不一樣。changes to be committed 表示 staging area 的版本和最後一次 commit 不一樣。如果把 `a.txt` 先 `git add` 後再修改 `a.txt` ，則你會再 changes not staged 跟 changes to be committed 看到 `a.txt`。
@@ -108,46 +109,53 @@ Commit 過的檔案不會因為 `git reset` 而消失，正如手冊所說的
 
 `--hard` 的意思如上所敘，會洗掉未  commit 的修改。
 
-`
+
 >[!question]
 >如何創造、合併、刪除和剪裁 `branch`? `branch` 的本質是啥?
 
-使用 `git branch` 變能看目前專案內所有的 branch。`git branch <branchname>` 可以創建出一個新的 branch。 `git branch -m [<oldbranch>] <newbranch>` 可以改 branch 的名字。`git branch -d <branchname>` 可以刪除一個 branch。`git checkout <branchname>` 可以跳到想去的 branch，`git checkout -b <branchname>` 可以創造一個新 branch 並把 HEAD 移過去，`git checkout -b bird 657fce7` 能夠在 SHA 值為 657fce7 開頭的 commit 開出一個分支叫做 bird 並把 HEAD 移到該 commit。`git merge <branchname>` 會先造一個 commit 把當前 branch 跟新增的 branch 合在一起 (或是更精確的說是這個 commit 指向當前 branch 的 commit 和新增 branch 的 commit)，並把當前的 head 和 branch 移到該 commit。`git branch -d <branchname>` 會刪除 branch。`git branch <branchname> [<start_point>]` 可以直接在 `<start_point>` 上建立 branch，`<start_point>` 在手冊的描述如下
+使用 `git branch` 變能看目前專案內所有的 branch。`git branch <branchname>` 可以創建出一個新的 branch。 `git branch -m [<oldbranch>] <newbranch>` 可以改 branch 的名字。`git branch -d <branchname>` 可以刪除一個 branch。`git checkout <branchname>` 可以跳到想去的 branch，`git checkout -b <branchname>` 可以創造一個新 branch 並把 HEAD 移過去，`git checkout -b bird 657fce7` 能夠在 SHA 值為 657fce7 開頭的 commit 開出一個分支叫做 bird 並把 HEAD 移到該 commit。`git merge <branchname>` 會把當前 branch 跟要合併的 branch (由 `branchname` 表達) 合在一起
+- 如果當前 branch 是要合併的 branch 的祖先 (從要合併的 branch 沿著 parent 往回走，走得到當前 branch): 直接 fast-forward
+- 如果當前 branch 是要合併的 branch 的後代 (從當前 branch 沿著 parent 往回走，走得到要合併的 branch): 啥都不幹，因為合併的 branch 都在當前 branch 內，沒啥要合併的。  
+- 如果當前 branch 和要合併的 branch 是分岔的: 會先造一個 commit 把當前 branch 跟新增的 branch 合在一起 (這個 commit 指向當前 branch 的 commit 和新增 branch 的 commit)，並把當前的 branch 移到該 commit 而 HEAD 也會隨 branch 移動
+
+`git branch -d <branchname>` 會刪除 branch。`git branch <branchname> [<start_point>]` 可以直接在 `<start_point>` 上建立 branch，`<start_point>` 在手冊的描述如下
 >The new branch head will point to this commit. It may be given as a branch name, a commit-id, or a tag. If this option is omitted, the current HEAD will be used instead.
 
-`git rebase` 提供了把兩個 branch 合併成一個 branch 的可能。假設目前的 HEAD 在 cat branch 且 HEAD 指向 b174a5 做 `git rebase dog` 整個過程和結果如下圖
+`git rebase [<upstream> [<branch>]]` 提供了把一個把當前分支的 commits 整個移到另一個分支的可能。假設目前的 HEAD 在 cat branch 且 HEAD 指向 b174a5 做 `git rebase dog` 整個過程和結果如下圖
 ![[git rebase picture.png]]
 參考自: [為你自己學 Git 第六篇第八章 (另一種合併方式（使用 rebase）)](https://gitbook.tw/chapters/branch/merge-with-rebase)
-一般的 `git merge` 可以用 `git reset --hard HEAD^` 會到 commit 前；而 `git rebase` 可以用 `git reset --hard ORIG_HEAD` 回到 rebase 前，會是去翻 `git reflog` 找到 `git rebase` 前一個 commit，依據手冊
->If `<branch>` is specified, git rebase will perform an automatic git switch `<branch>` before doing anything else.
+一般的 `git merge` 可以用 `git reset --hard ORIG_HEAD` 會到 commit 前 (不建議用 `git reset --hard HEAD^` 因為 fast-forward 的 `HEAD^` 不是原本位置)；而 `git rebase` 可以用 `git reset --hard ORIG_HEAD` 回到 rebase 前，或是去翻 `git reflog` 找到 `git rebase` 前一個 commit，依據手冊
+>The current branch is reset to **`<upstream>`**
 
-`git rebase` 前會跳掉要當新 base 的那個 commit。`git checkout --ours <pathspec>` 跟 `git checkout --theirs <pathspec>` 可以在 merge 或是 rebase 衝突在同一檔案時，決定要用誰後直接把 `<pathspec>` 改成衝突的檔案名。`git rebase -i <commit>` 可以修改從當前 HEAD 到該 commit 的所有 commit message (reword)；合併這之間的多個 commit (squash)；把一個 commit 拆成多個 commit (edit)，在到 edit 的那個 commit 可以使用 `git reset HEAD^` 來把這 commit 拆了再修改；刪除 commit 或是修改 commit 順序，直接去 `git rebase -i <commit>` 頁面改。一樣 `git rebase -i <commit>` 的操作可以用 `git reset --hard ORIG_HEAD` 來還原。`git revert HEAD --no-edit` 可以用來取消做後一次 commit，其原理是透過一個新 commit 來取消原來的 commit，可以再使用一次 `git revert HEAD --no-edit` 來取消該才那次取消的 commit，或是直接用 `git reset --hard HEAD^`。
+`git rebase` 前會跳掉要當新 base 的那個 commit。`git checkout --ours <pathspec>` 跟 `git checkout --theirs <pathspec>` 可以在 merge 或是 rebase 衝突在同一檔案時，決定要用誰後直接把 `<pathspec>` 改成衝突的檔案名。
 
+>[!info]
+>`--ours` 跟 `--theirs` 在 `git merge` 跟 `git rebase` 的意義不太一樣:
+>- `git merge`: `--ours` 是 HEAD 所在的 branch，而 `--theirs` 是合併的那個 branch。
+>- `git rebase`: `--ours` 是目前已重建好的部分（以 `git rebase dog` 為例: 從 dog 開始）；`--theirs` 是正在被重新套用的那個 commit。以 `git rebase dog` 且當前 checkout 的 branch 是 cat 為例，因為 `git rebase` 一開始會先 checkout 到新 base（dog），再把 cat 的 commit 一個個套上來，所以 HEAD（= ours）在 dog 那一側。可參考原文
+>> Note that during git rebase and git pull --rebase, ours and theirs may appear swapped; --ours gives the version from the branch the changes are rebased onto, while --theirs gives the version from the branch that holds your work that is being rebased.
 
-
-
-
-
-在 "Pro git" 3.1 節的擷取原文如下
+`git rebase -i <commit>` 可以修改從當前 HEAD 到該 commit 的下一個 commit 的所有 commit message (reword)；合併這之間的多個 commit (squash)；把一個 commit 拆成多個 commit (edit)，在到 edit 的那個 commit 可以使用`git reset HEAD^`；刪除 commit 或是修改 commit 順序，直接去 `git rebase -i <commit>` 頁面改。一樣 `git rebase -i <commit>` 的操作可以用 `git reset --hard ORIG_HEAD` 來還原。`git revert HEAD --no-edit` 可以用來取消做後一次 commit，其原理是透過一個新 commit 來取消原來的 commit，可以再使用一次 `git revert HEAD --no-edit` 來取消該才那次取消的 commit，或是直接用 `git reset --hard HEAD^`。
+	Branch 的本質可以看 "Pro git" 3.1 節的擷取原文
 >What happens when you create a new branch? Well, doing so creates a new pointer for you to move around.
 
 從這可以看出 branch 就只是個指向 commit 的指標。
 
-
-
-
-`git log --oneline --graph --all`
-
+一個看所有 branch 的記錄的指令: `git log --oneline --graph --all`
 
 >[!important]
 >不要在推出去的 commit 用 `git rebase` 跟 `git reset`，因為他們會修改歷史紀錄。
 
+>[!question]
+>`git rebase` 似乎修改 commit 的歷史，我是真的在 `git rebase` 後無法得知那些 commit 是被誰改的又改了啥嗎? 為何 `git rebase -i`  後改到有 branch 指向的 commit，該 branch 在改前顯示在 `git log` 上在改後變不在 `git log` 上?
 
 
 
 >[!question]
->`git rebase` 似乎修改 commit 的歷史，我是真的在 `git rebase` 後無法得知那些 commit 是被誰改的又改了啥嗎? 為何 `git rebase -i`  後改到有 branch 指向的 commit，該 branch 在改前顯示在 `git log` 上在改後變不在 `git log` 上?
+>多人協作中 `git reset` 跟 `git rebase` 扮演何種角色?
 
+>[!important]
+>Do not rebase commits that exist outside your repository and that people may have based work on.
 
 
 
@@ -159,8 +167,52 @@ Commit 過的檔案不會因為 `git reset` 而消失，正如手冊所說的
 
 
 >[!question]
+>我除了記 commit 的 SHA 值外，有無更快的方式到這 commit? branch 跟 tag 差在哪?
+
+可以使用 
+- `git tag <tagname> <object>`: 為 object 打上 lightweight tag。
+- `git tag -a -m "msg" <tagname> <object>`: 為 object 打上 annotated tag。
+
+在打上 tag 後我們可以用 `git checkout` 到那個 commit 。`git tag -d <tagname>` 可以刪除 tag。
+>[!info]
+>在 `git checkout <tagname>` 切到某個 commit ，當前的 HEAD 會變成 detached HEAD，只要 `git checkout`  的物件不是 local branch ，HEAD 都會變成 detached HEAD，正如手冊所說的
+>>Branch to checkout; if it refers to a branch (i.e., a name that, when prepended with "refs/heads/", is a valid ref), then that branch is checked out. Otherwise, if it refers to a valid commit, your HEAD becomes "detached" and you are no longer on any branch (see below for details).
+>
+>在 detached HEAD 一樣可以做 `git add`、`git commit` 等操作，但因為沒 branch 指著，所以在跳到其他 branch 或 commit 時，這些新造的 commit 只能去 `git reflog` 找。
+
+Annotated tag 的資訊量是 lightweight tag 的超集，annotated tag 可以知道誰在何時打下這個 tag ，在官方文檔說
+>_Annotated tags are meant for release while lightweight tags are meant for private or temporary object labels_.
+
+branch 跟 tag 似乎都能對應到一個 commit，那兩者的差別在哪? 兩者差在目前 checkout 的 branch 在 commit 後往前走，而 tag 不會。
+
+
+>[!question]
+>我一定要用 `git add` 跟 `git commit` 把當前 working directory 的檔案送到 staging area 在送到 repository 才能紀錄目前的工作嗎?
+
+`git stash` 可以暫存目前在 working directory 和 staging area 且 tracked 檔案的狀態 (如果要把 untracked 檔案也要拉進來，要用 `git stash -u`)，在暫存後**兩者都會回到 HEAD 的乾淨狀態**。可以用 `git stash list` 看所有 `git stash` 儲存的所有狀態，其顯示的標誌為 `stash@{0}, stash@{1}, stash@{2}, ...` ，這之中  {} 內的數字越小為最新的 stash 結果。
+- `git stash drop <stash>`：把不要的 stash 丟掉。
+- `git stash apply <stash>`：把 stash 套用回來，主要是修改 working directory，不會產生 commit。
+- `git stash pop <stash>`：套用後再把該 stash 丟掉。
+- 省略 `<stash>` 時，預設是 `stash@{0}`。
+**注意**
+- apply 和 pop 也可能動到 staging area：
+    - stash 前已經 `git add` 的新檔案，套用後會回到 staged 狀態。
+    - 加 `--index` 會連原本的 staged 狀態一起還原。
+    - 發生衝突時，衝突的檔案會在 staging area 被標成 unmerged。
+- `pop` 發生衝突時不會丟掉該 stash，解決衝突後要自己用 `git stash drop` 刪掉。
+
+
+>[!question] 
+>如果不小心把機敏資料推到本地的 repository  如何處理? 推到 push 到遠端 server 又如何處理?
+
+
+
+
+>[!question]
 >Git 想要儲存什麼東西，提供甚麼服務? 儲存東西的結構為何?
 
+
+檔案本身，檔案提交紀錄 (誰提交檔案的，誰提交紀錄的)，全部檔案的結構
 
 
 # 雜項
