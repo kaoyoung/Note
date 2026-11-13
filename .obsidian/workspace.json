@@ -8,62 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "97750cfa1844a237",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CS61A/Assignment of Chapter 2 & Section 4.2 (HW03~06, LAB03~08).md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Assignment of Chapter 2 & Section 4.2 (HW03~06, LAB03~08)"
-            }
-          },
-          {
-            "id": "ed4a7e401b7b23fb",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "C Programming FAQs (Section 6 Array and Pointer).md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "C Programming FAQs (Section 6 Array and Pointer)"
-            }
-          },
-          {
-            "id": "bd26bd8228119134",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CS61A/Compare C and Python.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Compare C and Python"
-            }
-          },
-          {
-            "id": "1a01a9250ee771da",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Git/git 筆記.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "git 筆記"
-            }
-          },
-          {
             "id": "f53ce102e002fa8c",
             "type": "leaf",
             "state": {
@@ -78,21 +22,35 @@
             }
           },
           {
-            "id": "673bc9ffe6bd57c9",
+            "id": "e871b2ac8138cc83",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Linux BSP 資料/未命名.md",
+                "file": "Linux BSP 資料/bootlin 實做練習/Embedded Linux system architecture.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "未命名"
+              "title": "Embedded Linux system architecture"
             }
           },
           {
-            "id": "cdd9c8107d235889",
+            "id": "dfd0d76f65f21fb9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux_command/新增 user.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "新增 user"
+            }
+          },
+          {
+            "id": "465234971c67aa64",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -104,23 +62,9 @@
               "icon": "lucide-file",
               "title": "linux 指令"
             }
-          },
-          {
-            "id": "9d8a5c30b2fa49b2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Linux BSP 資料/電路基本知識.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "電路基本知識"
-            }
           }
         ],
-        "currentTab": 7
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -285,49 +229,52 @@
       "bases:建立新的 base": false
     }
   },
-  "active": "9d8a5c30b2fa49b2",
+  "active": "465234971c67aa64",
   "lastOpenFiles": [
-    "Pasted image 20261110154401.png",
+    "Linux BSP 資料/bootlin 實做練習/Embedded Linux system architecture.md",
     "Linux BSP 資料/linux 指令.md",
-    "Linux BSP 資料/Pasted image 20261110142555.png",
-    "Pasted image 20260906011313.png",
-    "Pasted image 20260906010816.png",
-    "Pasted image 20260905232530.png",
-    "Pasted image 20260511163200.png",
-    "Linux BSP 資料/電路基本知識.md",
-    "Linux BSP 資料/未命名.md",
     "Linux BSP 資料/設備相關問題.md",
+    "Linux_command/新增 user.md",
+    "Linux_command/檔案權限和搜尋.md",
+    "Linux_command/Copy.md",
+    "Linux_command/Vim.md",
+    "Linux_command/Server Secure.md",
+    "Linux_command/Question set.md",
+    "Linux_command/Process monitor.md",
+    "Linux_command/How to SSH from Windows to an Ubuntu GUI.md",
     "Git/git 筆記.md",
-    "Linux BSP 資料",
-    "CS61A/Compare C and Python.md",
-    "待做清單.md",
-    "Git/git rebase picture.png",
-    "Linux_command/Linux_command picture/data stream redirection.png",
-    "C Programming FAQs (Section 6 Array and Pointer).md",
-    "數據結構與算法/二分搜思路總結.md",
-    "Perf 介紹.md",
-    "Untitled.md",
     "CS61A/Assignment of Chapter 2 & Section 4.2 (HW03~06, LAB03~08).md",
-    "C Programming FAQs (Section 7 Characters and Strings).md",
-    "CS61A/Chapter 2.md",
-    "CS61A/Chapter 4.md",
-    "CS61A/Chpater 3.md",
-    "CS61A/Chapter 1.md",
-    "運算符號優先級 (Operator precedence).md",
-    "CS61A/Assignment of Chapter 1 (HW01~02, LAB00~02).md",
-    "微積分/极限理论(数列极限)/2.2 收斂數列的性值.md",
-    "C_C++/C/Question set.md",
-    "線性代數/Chapter 1.md",
-    "線性代數/Chapter 2.md",
-    "VM Final Paper 修改部分.md",
-    "微積分/pichachu345_分析學基本概念/分析學基本方法目錄1_感想.md",
+    "C Programming FAQs (Section 6 Array and Pointer).md",
+    "Linux BSP 資料/bootlin 實做練習/Bootloader - U-Boot.md",
+    "Linux BSP 資料/bootlin 實做練習/Building a cross-compiling toolchain.md",
+    "Linux BSP 資料/Linux C 一站式學習學習/x86 彙編程序基礎.md",
+    "Pasted image 20261112165103.png",
+    "Pasted image 20261112161906.png",
+    "待做清單.md",
+    "Linux BSP 資料/I2C Sketch.png",
+    "Linux BSP 資料/DC Charactersitic.png",
+    "Linux BSP 資料/SPI mode 1.png",
+    "Linux BSP 資料/Pull-up resistor.png",
+    "Linux BSP 資料/Pull-up resistor and MCU resistant.png",
+    "Linux BSP 資料/3.3V Logic Families.png",
+    "Linux BSP 資料/Linux C 一站式學習學習/GDB.md",
+    "Linux BSP 資料/Linux C 一站式學習學習/C 標準庫.md",
+    "Linux BSP 資料/Linux C 一站式學習學習/彙編與 C 之間的關係.md",
+    "Linux BSP 資料/Linux C 一站式學習學習/連結詳解.md",
+    "Linux BSP 資料/Linux C 一站式學習學習/預處理.md",
+    "Linux BSP 資料/Linux C 一站式學習學習",
+    "Pasted image 20261111231850.png",
+    "Pasted image 20261111231316.png",
+    "Linux BSP 資料/bootlin 實做練習",
+    "Linux BSP 資料/電路基本知識.md",
+    "面試問題/bit_operation_answers.md",
+    "面試問題/bit_operation_exam.md",
+    "面試問題",
+    "Linux BSP 資料",
     "CS61A",
     "線性代數",
     "Untitled.base",
-    "Rust Book/Rust_Picture/integer bit length.png",
     "OS/XV6",
-    "Rust Book/Rust_Picture/Data Type.png",
-    "虛擬機器/VM_graph/direct device assignment demonstration.png",
     "Rust Book/Rust_Picture"
   ]
 }

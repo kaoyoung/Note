@@ -201,6 +201,113 @@ branch 跟 tag 似乎都能對應到一個 commit，那兩者的差別在哪? �
     - 發生衝突時，衝突的檔案會在 staging area 被標成 unmerged。
 - `pop` 發生衝突時不會丟掉該 stash，解決衝突後要自己用 `git stash drop` 刪掉。
 
+>[!question]
+>如何在 GitHub 建立 repository? 已經和 remote repo 建立聯繫，如何做後續的更新與推上去?
+
+直接上 GitHub 建立一個 repository，然後依照他給的指令
+```shell
+echo "# practice-git" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:your_name/repo_name.git
+git push -u origin master
+```
+前四個指令只是創造一個 `README.md` 檔案並把他 commit 到本地的 repository。`git remote add <name>` 代表 Add a remote named `<name>` for the repository at `<URL>`，從說明可以看到 `<name>` 是可以隨便取的。`git push -u origin master` 其中的 `origin` 代表把推到 origin 這個 remote repo，而整個 `git push -u origin master` 的意思是把 master 這分支的內容推到 origin 這個 ~~upstream~~ (upstream 是分支屬性) remote repo上，並因為 `-u` 把 remote branch 的設定存在 `.git/config` ，同時 `origin/master` 設為本地 master 的 upstream，如此以後 `git fetch`、`git pull`、`git merge`、`git push` 不用寫 remote branch。如果 server 沒有 master 這分支，那會建立一個 master 分支，如果 server 有 master 這分支，那會移動 server 的 master 分支 (前提是 fast-forward)，使得 local 和 remote 的分支一致，當然 remote 的 master 分支會指到更新後的分支頂端。
+和 remote repo 建立聯繫可以透過 `git remote add` 或是 `git clone`。能用 `git fetch` 把遠端的 commit 跟 branch 載下來，如果遠端在你 Local 的基礎上向前推進，用 `git status` 會出現類似於下面的提醒
+>Your branch is behind 'origin/master' by 1 commit, and can be fast-forwarded.
+
+你可以直接用 `git merge <branchname>` 來處理，這邊的話就會是 `git merge origin/master` 。如果遠端 branch 真的是你 local branch 的後代，那會是 fast-forward；如果兩邊各自有新的 commit（`git status` 會顯示 `have diverged`），merge 會產生一個 merge commit，只有兩邊改到同一處，或兩邊新增了同名但內容不同的檔案時才會衝突。有衝突時可以先用 `git status` 看哪些是有衝突的，有可能是 both added 或是 both modified。可以直接打開該檔案，其大概會長以下模樣
+```txt
+<<<<<<< HEAD
+# practive-git
+=======
+# practice-git
+>>>>>>> origin/master                      
+```
+
+把不要的刪掉就行，如果不想要 remote 的那就把檔案改成
+```text
+# practive-git
+```
+如果不想要 local 的那就把檔案改成
+```text
+# practice-git
+```
+
+改完之後接 `git add <filename> && git commit -m "msg"`，如此做完後會讓 local branch 領先於 remote branch 幾個 commit。另一個思路是直接決定用哪一版的，如果用遠端的用
+```text
+git checkout --theirs <filename>
+git add <filename>
+git commit -m "msg"
+```
+如果用本地端
+```text
+git checkout --ours <filename>
+git add <filename>
+git commit -m "msg"
+```
+
+如果不想寫 `git fetch && git merge <branchname>` 可以用 `git pull`。還有一個簡寫是 `git pull --rebase` 該簡寫全部指令為 `git fetch && git rebase <remote_branchname>` ，這邊有一個小細節是
+
+>[!important]
+>`rebase` 的 `--ours` 跟 `--theirs` 意思為，`--ours` 是被當作 base 的那個 branch，`--theirs` 是接到該 base 上的那個 branch。
+
+所以用本地端的檔案要用
+```text
+git checkout --theirs <filename>
+git add <filename>
+git rebase --continue
+```
+要用遠端的檔案要用
+```text
+git checkout --ours <filename>
+git add <filename>
+git rebase --continue
+```
+
+把檔案推上去可以直接用 `git push` 或是 `git push -u <remote_repo> <local_branchname>` ，當然在 `git push` 之前要確保 local branch 是 remote branch 的後代，正如手冊所說的
+>If the push destination is a **branch** (`refs/heads/*`): only fast-forward updates are allowed, which means the destination must be an ancestor of the source commit. The source must be a commit.
+
+有一個暴力且**極端不推薦**的 push 的方式是 `git push -f` 可以強制推上去，可以去 GitHub 的 setting 內的 branches 加上 branch rule 禁止一些逆天操作。
+
+>[!note] 為啥 `git fetch`、`git merge` 、`git pull` 、`git push` 可以不寫 remote branch 名稱。
+>因為在第一次 `git push -u origin master` 就已經把遠端的 branch 設定好了，該設定檔在 `.git/config` ，如下
+>```txt
+>[remote "origin"]
+>	url = https://github.com/kaoyoung/practice-git.git
+>	fetch = +refs/heads/*:refs/remotes/origin/*
+>[branch "master"]
+>	remote = origin
+>	merge = refs/heads/master
+>```
+>可以看到 remote repo 叫做 origin，本地跟它合作的 branch 叫做 master。
+
+>[!question]
+>如何刪除 remote 的 branch?
+
+先看這指令 `git push origin master:cat` 代表推到 origin 這個 remote repo 並把 cat 分支 (沒的話造一個) 指本地 master 指的那一個 commit。因此直接寫 `git push origin :cat` 可以想成把一個空的東西推到 cat 這分支，也就相當於把該分支刪除。現代的寫法是 `git push origin -d cat`。
+
+>[!question]
+>如何跟上當初 fork 的那個專案的進度?
+
+簡明解是直接在 fork 一次。另一個方式是再走一次 `git remote add` 的整個流程，具體來說如下
+```shell
+# 只需做一次：把「原作者」的 repo 加成 remote，慣例命名為 upstream
+git remote add upstream git@github.com:original_owner/repo_name.git
+
+# 之後每次要同步
+git fetch upstream          # 抓下原專案的最新進度
+git switch master           # 切到要合併的 branch（舊版 git 用 git checkout master）
+git merge upstream/master   # 把原專案的 master 合併進本地 master
+git push origin master      # 推回自己的 fork
+```
+`fetch` 加 `merge` 也可以合成一行：
+```shell
+git pull upstream master
+```
+只要寫明 remote 和 branch，就不需要事先設定追蹤分支。
+
 
 >[!question] 
 >如果不小心把機敏資料推到本地的 repository  如何處理? 推到 push 到遠端 server 又如何處理?
@@ -223,5 +330,9 @@ branch 跟 tag 似乎都能對應到一個 commit，那兩者的差別在哪? �
 - `git mv hello.html world.html`
 - `git blame index.html`、`git blame 5,10 index.html`
 - `git checkout cinderella.html`、`git checkout .` (前兩指令拿到的是 index 的版本)、`git checkout HEAD~2 welcome.html` (這指令會更改 index，think about why)
+- `git cherry-pick <commit-hash>`、`git cherry-pick <commit-hash-1> <commit-hash-2>`
+
+
+
 
 

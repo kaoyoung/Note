@@ -15,3 +15,11 @@ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=4M conv=fsync status=progress
 ```
 
 lsblk、du、df、root
+
+`sudo apt-get -y install <name>`
+
+sudo apt update
+sudo apt-get upgrade
+sudo apt dist-upgrade
+
+`export PATH=$HOME/x-tools/arm-training-linux-musleabihf/bin:$PATH`
